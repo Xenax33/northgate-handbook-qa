@@ -2,5 +2,24 @@
 name = "northgate-handbook-qa"
 version = "0.1.0"
 description = "Q&A assistant over the Northgate Robotics handbook, with sources"
+readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "pypdf>=7.1.1",
+    "python-docx>=1.2.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.13.9,<0.14.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "handbook_qa"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.2.0",
+]

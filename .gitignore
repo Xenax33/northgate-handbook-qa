@@ -5,11 +5,12 @@ build/
 dist/
 wheels/
 *.egg-info
+.pytest_cache/
 
 # Virtual environments
 .venv
 
-# Secrets: the Groq key lives here and must never be committed
+# Secrets: the Gemini API key lives here and must never be committed
 .env
 
 # Editor and OS files
