@@ -35,7 +35,7 @@ def alternatives(item: Rule) -> list[str]:
 
 def load_questions(path: Path, known_doc_ids: set[str] | None = None) -> list[Question]:
     questions = []
-    for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
+    for number, line in enumerate(path.read_text(encoding="utf-8-sig").splitlines(), start=1):
         if not line.strip():
             continue
         try:

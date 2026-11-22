@@ -8,7 +8,14 @@ from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
+def _project_root() -> Path:
+    """The repository folder. Found from this file when the package is installed in editable mode
+    (what `uv sync` does); otherwise the folder the command is run from."""
+    candidate = Path(__file__).resolve().parents[2]
+    return candidate if (candidate / "pyproject.toml").is_file() else Path.cwd()
+
+
+PROJECT_ROOT = _project_root()
 DEFAULT_CORPUS = PROJECT_ROOT / "data" / "corpus"
 DEFAULT_MODEL_CACHE = PROJECT_ROOT / ".cache" / "models"
 

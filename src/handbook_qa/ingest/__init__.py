@@ -4,7 +4,7 @@ from datetime import date
 from pathlib import Path
 
 from handbook_qa.ingest import csv_table, html_page, pdf, text, word
-from handbook_qa.ingest.document import Document, Section, State
+from handbook_qa.ingest.document import Document, ReaderError, Section, State
 from handbook_qa.ingest.manifest import ManifestError, document_states, read_manifest
 
 READERS = {
@@ -39,6 +39,12 @@ def load_corpus(corpus_dir: Path, today: date) -> list[Document]:
         if not file.is_file():
             raise ManifestError(f"{entry.doc_id}: file {entry.path} listed in the manifest does not exist")
         state, superseded_by = states[entry.doc_id]
+        try:
+            sections = read_sections(file)
+        except ReaderError:
+            raise
+        except Exception as error:  # pypdf / python-docx errors on a damaged file
+            raise ReaderError(f"{entry.path}: could not be read ({type(error).__name__}: {error})") from error
         documents.append(
             Document(
                 doc_id=entry.doc_id,
@@ -51,10 +57,10 @@ def load_corpus(corpus_dir: Path, today: date) -> list[Document]:
                 state=state,
                 superseded_by=superseded_by,
                 supersedes=entry.supersedes,
-                sections=read_sections(file),
+                sections=sections,
             )
         )
     return documents
 
 
-__all__ = ["Document", "Section", "State", "ManifestError", "UnsupportedFormat", "load_corpus", "read_sections", "SUPPORTED_FORMATS"]
+__all__ = ["Document", "Section", "State", "ManifestError", "ReaderError", "UnsupportedFormat", "load_corpus", "read_sections", "SUPPORTED_FORMATS"]

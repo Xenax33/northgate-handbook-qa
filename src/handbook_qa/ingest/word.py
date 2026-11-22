@@ -23,6 +23,7 @@ def read(path: Path) -> list[Section]:
     sections: list[Section] = []
     heading_path: list[str] = []
     body: list[str] = []
+    list_number = 0
 
     def flush() -> None:
         text = "\n".join(body).strip()
@@ -40,6 +41,11 @@ def read(path: Path) -> list[Section]:
         if not text or style == "Title" or text.startswith("Document ID:"):
             continue
         level = heading_level(style)
+        if style.startswith("List Number"):
+            list_number += 1
+            body.append(f"{list_number}) {text}")
+            continue
+        list_number = 0
         if level:
             flush()
             heading_path[:] = heading_path[: level - 1] + [text]
@@ -60,7 +66,19 @@ def heading_level(style: str) -> int:
 
 
 def table_to_markdown(table: Table) -> str:
-    rows = [[cell.text.strip().replace("|", "/") for cell in row.cells] for row in table.rows]
+    """One Markdown row per table row. A merged cell's text is shown once, and the other columns it
+    spans are left empty, so later cells stay under their own header; a cell with several paragraphs
+    is joined into one line. (Tables nested inside cells are not read.)"""
+    rows = []
+    for row in table.rows:
+        cells, seen = [], []
+        for cell in row.cells:
+            if any(cell._tc is tc for tc in seen):  # python-docx repeats a merged cell for every column it covers
+                cells.append("")
+                continue
+            seen.append(cell._tc)
+            cells.append(" ".join(p.text.strip() for p in cell.paragraphs if p.text.strip()).replace("|", "/"))
+        rows.append(cells)
     if not rows:
         return ""
     width = max(len(row) for row in rows)

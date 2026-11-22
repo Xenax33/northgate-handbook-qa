@@ -6,6 +6,7 @@ A section longer than MAX_CHARS (only possible for a long document without headi
 is cut at paragraph breaks into pieces of at most MAX_CHARS.
 """
 
+import re
 from dataclasses import dataclass
 from datetime import date
 
@@ -65,11 +66,13 @@ def build_passages(documents: list[Document]) -> list[Passage]:
 
 
 def split_long(text: str, max_chars: int = MAX_CHARS) -> list[str]:
-    """Keep text whole if it fits; otherwise cut at line breaks, never inside a line."""
+    """Keep text whole if it fits; otherwise cut at line breaks. A single line that is itself too
+    long (readers join each paragraph into one line) is cut between sentences, or between words."""
     if len(text) <= max_chars:
         return [text]
+    lines = [piece for line in text.split("\n") for piece in _split_line(line, max_chars)]
     pieces, current = [], ""
-    for line in text.split("\n"):
+    for line in lines:
         candidate = f"{current}\n{line}" if current else line
         if current and len(candidate) > max_chars:
             pieces.append(current.strip())
@@ -79,3 +82,28 @@ def split_long(text: str, max_chars: int = MAX_CHARS) -> list[str]:
     if current.strip():
         pieces.append(current.strip())
     return [piece for piece in pieces if piece]
+
+
+def _split_line(line: str, max_chars: int) -> list[str]:
+    if len(line) <= max_chars:
+        return [line]
+    units = re.split(r"(?<=[.!?])\s+", line)  # sentences
+    if any(len(unit) > max_chars for unit in units):
+        units = line.split(" ")  # a sentence that is still too long: fall back to words
+    out, current = [], ""
+    for unit in units:
+        while len(unit) > max_chars:  # a single "word" longer than the limit (e.g. a URL)
+            if current:
+                out.append(current)
+                current = ""
+            out.append(unit[:max_chars])
+            unit = unit[max_chars:]
+        candidate = f"{current} {unit}" if current else unit
+        if len(candidate) > max_chars:
+            out.append(current)
+            current = unit
+        else:
+            current = candidate
+    if current:
+        out.append(current)
+    return out

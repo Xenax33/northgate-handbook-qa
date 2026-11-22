@@ -22,7 +22,8 @@ class Embedder:
         return _normalise(np.array(list(self.model.embed(texts)))) if texts else np.zeros((0, 0))
 
     def query(self, text: str) -> np.ndarray:
-        # query_embed adds the model's "Represent this sentence for searching..." prefix
+        # Note: fastembed 0.9.1's query_embed gives exactly the same vector as embed for this model;
+        # it does NOT add bge's "Represent this sentence for searching relevant passages: " prefix.
         return _normalise(np.array(list(self.model.query_embed([text]))))[0]
 
 

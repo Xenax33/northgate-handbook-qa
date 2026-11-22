@@ -34,7 +34,10 @@ REQUIRED = ("doc_id", "path", "title", "category", "owner", "effective_date", "s
 
 
 def read_manifest(path: Path) -> list[ManifestEntry]:
-    raw = json.loads(path.read_text(encoding="utf-8"))
+    try:
+        raw = json.loads(path.read_text(encoding="utf-8-sig"))  # -sig: Notepad and PowerShell 5.1 add a BOM
+    except json.JSONDecodeError as error:
+        raise ManifestError(f"{path.name} is not valid JSON: {error.msg} (line {error.lineno})") from error
     entries = []
     for item in raw.get("documents", []):
         missing = [key for key in REQUIRED if not item.get(key)]
@@ -52,7 +55,7 @@ def read_manifest(path: Path) -> list[ManifestEntry]:
                 category=item["category"],
                 owner=item["owner"],
                 effective_date=effective,
-                status=item["status"],
+                status=item["status"].strip().lower(),
                 supersedes=item.get("supersedes"),
             )
         )
@@ -76,15 +79,20 @@ def document_states(entries: list[ManifestEntry], today: date) -> dict[str, tupl
 
     Rules, in order:
     1. status "deprecated" -> DEPRECATED.
-    2. another document supersedes it and that one is already in force -> SUPERSEDED.
+    2. another document supersedes it, and that one is in force and not deprecated -> SUPERSEDED
+       (if several do, the one that took effect last is named).
     3. its own effective date is after today -> NOT_YET_IN_FORCE.
     4. otherwise CURRENT.
+
+    A revision that doesn't declare `supersedes` leaves the older document current. That is right for
+    the 2027 parental leave revision: it covers births from 2027-01-01, and "all other terms of the
+    2024 policy continue to apply", so both stay in use from that date.
     """
-    superseded_by = {
-        entry.supersedes: entry.doc_id
-        for entry in entries
-        if entry.supersedes and entry.effective_date <= today
-    }
+    replacements = sorted(
+        (entry for entry in entries if entry.supersedes and entry.effective_date <= today and entry.status != "deprecated"),
+        key=lambda entry: entry.effective_date,
+    )
+    superseded_by = {entry.supersedes: entry.doc_id for entry in replacements}  # later dates overwrite earlier
     states = {}
     for entry in entries:
         if entry.status == "deprecated":
