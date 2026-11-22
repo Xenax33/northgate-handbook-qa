@@ -21,6 +21,16 @@ def test_numbers_must_stand_alone():
     assert not contains("16,000 robots", "16")
 
 
+def test_number_and_word_match_with_space_or_hyphen_singular_or_plural():
+    assert contains("you are within the 45-minute window", "45 minutes")  # eval run 1, multi-06
+    assert contains("a 16-day limit", "16 days")
+    assert contains("26 weeks fully paid", "26 weeks")
+    assert contains("one 24 hour report", "24 hours")
+    assert not contains("within the 45-minute window", "44 minutes")
+    assert not contains("a 145-minute window", "45 minutes")
+    assert contains("2 days per week", "2 days") and not contains("2 days per week", "2 weeks")
+
+
 def test_empty_term_never_matches():
     assert not contains("anything", "")
     assert not contains("anything", "**")

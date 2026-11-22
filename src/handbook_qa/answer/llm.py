@@ -15,7 +15,12 @@ from openai import OpenAI
 
 
 class LLMError(RuntimeError):
-    pass
+    """`kind` says what went wrong; `retryable` whether trying again later can help."""
+
+    def __init__(self, message: str, kind: str = "other", retryable: bool = False) -> None:
+        super().__init__(message)
+        self.kind = kind
+        self.retryable = retryable
 
 
 @dataclass(frozen=True)
@@ -38,6 +43,7 @@ class OpenAICompatibleModel:
             raise LLMError("No API key found. Put GEMINI_API_KEY=... in the .env file (see README).")
         self.name = model
         self._key = api_key
+        self.requests_made = 0  # HTTP requests sent by this object (SDK retries included only if max_retries=0)
         # The SDK retries 429 and 5xx responses itself, with exponential backoff.
         self._client = OpenAI(base_url=base_url, api_key=api_key, timeout=timeout, max_retries=max_retries)
 
@@ -45,6 +51,7 @@ class OpenAICompatibleModel:
         started = time.monotonic()
         for attempt in (1, 2):  # one extra try if the model breaks the JSON format
             try:
+                self.requests_made += 1
                 response = self._client.chat.completions.create(
                     model=self.name,
                     temperature=0,
@@ -52,19 +59,22 @@ class OpenAICompatibleModel:
                     response_format={"type": "json_schema", "json_schema": {"name": "answer", "strict": True, "schema": schema}},
                 )
             except openai.RateLimitError as error:
-                raise LLMError(f"The model's rate limit was reached (free tier: 15 requests a minute, 500 a day). {self._safe(error)}") from None
+                raise LLMError(f"The model's rate limit was reached (free tier: 15 requests a minute, 500 a day). {self._safe(error)}",
+                               "rate_limit", retryable=True) from None
             except openai.APITimeoutError:
-                raise LLMError("The model did not answer in time. Try again.") from None
+                raise LLMError("The model did not answer in time. Try again.", "timeout", retryable=True) from None
             except openai.APIConnectionError:
-                raise LLMError("Could not reach the model. Check the internet connection.") from None
+                raise LLMError("Could not reach the model. Check the internet connection.", "connection", retryable=True) from None
             except openai.APIStatusError as error:
-                raise LLMError(f"The model service returned HTTP {error.status_code}. {self._safe(error)}") from None
+                server_side = error.status_code >= 500  # e.g. 503 "service unavailable": temporary, worth retrying
+                raise LLMError(f"The model service returned HTTP {error.status_code}. {self._safe(error)}",
+                               f"http_{error.status_code}", retryable=server_side) from None
             content = response.choices[0].message.content or ""
             try:
                 data = json.loads(content)
             except json.JSONDecodeError:
                 if attempt == 2:
-                    raise LLMError("The model replied with text that isn't valid JSON, twice.") from None
+                    raise LLMError("The model replied with text that isn't valid JSON, twice.", "bad_json") from None
                 continue
             usage = response.usage
             return Completion(
