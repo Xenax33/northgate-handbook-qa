@@ -39,8 +39,9 @@ def test_exact_terms_are_found(searcher):
     assert doc_ids(searcher, "Where should secrets like API keys be stored?", 1) == ["sec-security-policy"]
 
 
-def test_meaning_is_found_without_shared_words(searcher):
-    assert "it-laptop-policy" in doc_ids(searcher, "my notebook computer was stolen, what now", 3)
+def test_meaning_finds_a_document_that_shares_almost_no_words(searcher):
+    # The laptop policy says "lost or stolen laptop"; this question shares only "from" with it.
+    assert doc_ids(searcher, "someone swiped my notebook from the car", 1) == ["it-laptop-policy"]
 
 
 def test_top_documents_groups_passages_by_document(searcher):

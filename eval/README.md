@@ -32,7 +32,7 @@
 ## Matching rules
 
 - A list means every item is required. An item that is itself a list is a set of alternatives, and any one of them is enough: `[["3", "three"]]` accepts either.
-- Text matching is case-insensitive. A number must not touch other digits, so `"16"` does not match `"160"`.
+- Text matching ignores case, extra whitespace and Markdown emphasis (`**12 days**` matches `12 days`). A number must not touch other digits, so `"16"` does not match `"160"`, and `"500"` does not match inside `"$2,500"`. The rule lives in `src/handbook_qa/evaluation/text_match.py` and is unit-tested.
 - Date-dependent questions assume today is **2026-11-22**. The eval fixes that date so results are the same whenever it runs.
 
 ## The four measures
