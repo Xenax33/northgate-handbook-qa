@@ -1,0 +1,657 @@
+{
+  "kind": "retrieval",
+  "run_at": "2026-11-23T03:22:20",
+  "git_commit": "87d1403+uncommitted",
+  "today": "2026-11-22",
+  "embedding_model": "BAAI/bge-small-en-v1.5",
+  "passages_searchable": 111,
+  "summary": {
+    "questions": 35,
+    "hit_at": {
+      "1": 28,
+      "3": 32,
+      "5": 34
+    },
+    "hit_at_3_by_category": {
+      "clarify": [
+        3,
+        3
+      ],
+      "date": [
+        2,
+        3
+      ],
+      "lookup": [
+        12,
+        12
+      ],
+      "multi": [
+        5,
+        6
+      ],
+      "version": [
+        6,
+        6
+      ],
+      "words": [
+        4,
+        5
+      ]
+    },
+    "misses_at_3": {
+      "date-03": [
+        "eng-deploy-runbook",
+        "eng-oncall-runbook",
+        "notes-allhands-2026-09"
+      ],
+      "multi-02": [
+        "hr-travel-policy",
+        "fin-expense-policy",
+        "hr-travel-booking-guide"
+      ],
+      "words-01": [
+        "hr-training-policy",
+        "fin-procurement-policy",
+        "ref-faq"
+      ]
+    },
+    "forbidden_documents_returned": {}
+  },
+  "per_question": [
+    {
+      "id": "lookup-01",
+      "category": "lookup",
+      "top_documents": [
+        "it-vpn-guide",
+        "hr-remote-work-policy",
+        "eng-oncall-runbook",
+        "it-password-policy",
+        "ref-onboarding-checklist"
+      ],
+      "hit_at": {
+        "1": true,
+        "3": true,
+        "5": true
+      },
+      "forbidden_found": []
+    },
+    {
+      "id": "lookup-02",
+      "category": "lookup",
+      "top_documents": [
+        "it-password-policy",
+        "hr-remote-work-policy",
+        "hr-probation-policy",
+        "it-incident-reporting",
+        "ref-faq"
+      ],
+      "hit_at": {
+        "1": true,
+        "3": true,
+        "5": true
+      },
+      "forbidden_found": []
+    },
+    {
+      "id": "lookup-03",
+      "category": "lookup",
+      "top_documents": [
+        "eng-disaster-recovery",
+        "ref-glossary",
+        "support-escalation",
+        "eng-oncall-runbook",
+        "fin-expense-policy"
+      ],
+      "hit_at": {
+        "1": true,
+        "3": true,
+        "5": true
+      },
+      "forbidden_found": []
+    },
+    {
+      "id": "lookup-04",
+      "category": "lookup",
+      "top_documents": [
+        "fin-procurement-policy",
+        "fin-expense-policy",
+        "fin-approval-matrix",
+        "hr-remote-work-policy",
+        "ref-faq"
+      ],
+      "hit_at": {
+        "1": true,
+        "3": true,
+        "5": true
+      },
+      "forbidden_found": []
+    },
+    {
+      "id": "lookup-05",
+      "category": "lookup",
+      "top_documents": [
+        "sec-security-policy",
+        "eng-logging-standards",
+        "eng-api-style-guide",
+        "ref-faq",
+        "eng-code-review"
+      ],
+      "hit_at": {
+        "1": true,
+        "3": true,
+        "5": true
+      },
+      "forbidden_found": []
+    },
+    {
+      "id": "lookup-06",
+      "category": "lookup",
+      "top_documents": [
+        "hr-travel-policy",
+        "hr-travel-booking-guide",
+        "fin-expense-policy",
+        "hr-leave-policy-v2",
+        "hr-training-policy"
+      ],
+      "hit_at": {
+        "1": true,
+        "3": true,
+        "5": true
+      },
+      "forbidden_found": []
+    },
+    {
+      "id": "lookup-07",
+      "category": "lookup",
+      "top_documents": [
+        "it-data-retention",
+        "eng-logging-standards",
+        "it-password-policy",
+        "notes-people-2026-06",
+        "ref-faq"
+      ],
+      "hit_at": {
+        "1": true,
+        "3": true,
+        "5": true
+      },
+      "forbidden_found": []
+    },
+    {
+      "id": "lookup-08",
+      "category": "lookup",
+      "top_documents": [
+        "hr-probation-policy",
+        "ref-onboarding-checklist",
+        "hr-remote-work-policy",
+        "hr-notice-and-exit",
+        "hr-leave-policy-v2"
+      ],
+      "hit_at": {
+        "1": true,
+        "3": true,
+        "5": true
+      },
+      "forbidden_found": []
+    },
+    {
+      "id": "lookup-09",
+      "category": "lookup",
+      "top_documents": [
+        "hr-travel-policy",
+        "fin-per-diem-table",
+        "fin-expense-policy",
+        "fin-reimbursement-sla",
+        "ref-handbook-index"
+      ],
+      "hit_at": {
+        "1": false,
+        "3": true,
+        "5": true
+      },
+      "forbidden_found": []
+    },
+    {
+      "id": "lookup-10",
+      "category": "lookup",
+      "top_documents": [
+        "org-chart",
+        "sec-security-policy",
+        "it-incident-reporting",
+        "ref-onboarding-checklist",
+        "support-escalation"
+      ],
+      "hit_at": {
+        "1": true,
+        "3": true,
+        "5": true
+      },
+      "forbidden_found": []
+    },
+    {
+      "id": "lookup-11",
+      "category": "lookup",
+      "top_documents": [
+        "eng-oncall-runbook",
+        "eng-sev-definitions",
+        "ref-glossary",
+        "support-escalation",
+        "it-incident-reporting"
+      ],
+      "hit_at": {
+        "1": true,
+        "3": true,
+        "5": true
+      },
+      "forbidden_found": []
+    },
+    {
+      "id": "lookup-12",
+      "category": "lookup",
+      "top_documents": [
+        "support-escalation",
+        "eng-oncall-runbook",
+        "eng-disaster-recovery",
+        "eng-api-style-guide",
+        "ref-faq"
+      ],
+      "hit_at": {
+        "1": true,
+        "3": true,
+        "5": true
+      },
+      "forbidden_found": []
+    },
+    {
+      "id": "version-01",
+      "category": "version",
+      "top_documents": [
+        "hr-leave-policy-v2",
+        "hr-working-hours-holidays",
+        "hr-referral-policy",
+        "ref-benefits-overview",
+        "hr-remote-work-policy"
+      ],
+      "hit_at": {
+        "1": true,
+        "3": true,
+        "5": true
+      },
+      "forbidden_found": []
+    },
+    {
+      "id": "version-02",
+      "category": "version",
+      "top_documents": [
+        "eng-deploy-runbook",
+        "eng-release-calendar",
+        "notes-platform-2026-03",
+        "notes-allhands-2026-09",
+        "team-product"
+      ],
+      "hit_at": {
+        "1": true,
+        "3": true,
+        "5": true
+      },
+      "forbidden_found": []
+    },
+    {
+      "id": "version-03",
+      "category": "version",
+      "top_documents": [
+        "eng-deploy-runbook",
+        "eng-code-review",
+        "hr-performance-review",
+        "fin-vendor-policy",
+        "eng-db-migration-runbook"
+      ],
+      "hit_at": {
+        "1": true,
+        "3": true,
+        "5": true
+      },
+      "forbidden_found": []
+    },
+    {
+      "id": "version-04",
+      "category": "version",
+      "top_documents": [
+        "eng-deploy-runbook",
+        "eng-rollback-procedure",
+        "eng-oncall-runbook",
+        "notes-platform-2026-03",
+        "notes-allhands-2026-09"
+      ],
+      "hit_at": {
+        "1": true,
+        "3": true,
+        "5": true
+      },
+      "forbidden_found": []
+    },
+    {
+      "id": "version-05",
+      "category": "version",
+      "top_documents": [
+        "eng-deploy-runbook",
+        "eng-db-migration-runbook",
+        "team-platform",
+        "eng-rollback-procedure",
+        "eng-oncall-runbook"
+      ],
+      "hit_at": {
+        "1": true,
+        "3": true,
+        "5": true
+      },
+      "forbidden_found": []
+    },
+    {
+      "id": "version-06",
+      "category": "version",
+      "top_documents": [
+        "hr-leave-policy-v2",
+        "ref-handbook-index",
+        "notes-people-2026-06",
+        "hr-parental-leave-policy-2027",
+        "hr-parental-leave-policy"
+      ],
+      "hit_at": {
+        "1": true,
+        "3": true,
+        "5": true
+      },
+      "forbidden_found": []
+    },
+    {
+      "id": "date-01",
+      "category": "date",
+      "top_documents": [
+        "hr-parental-leave-policy-2027",
+        "hr-parental-leave-policy",
+        "notes-people-2026-06",
+        "hr-leave-policy-v2",
+        "ref-faq"
+      ],
+      "hit_at": {
+        "1": true,
+        "3": true,
+        "5": true
+      },
+      "forbidden_found": []
+    },
+    {
+      "id": "date-02",
+      "category": "date",
+      "top_documents": [
+        "hr-parental-leave-policy",
+        "hr-parental-leave-policy-2027",
+        "ref-faq",
+        "notes-people-2026-06",
+        "hr-leave-policy-v2"
+      ],
+      "hit_at": {
+        "1": true,
+        "3": true,
+        "5": true
+      },
+      "forbidden_found": []
+    },
+    {
+      "id": "date-03",
+      "category": "date",
+      "top_documents": [
+        "eng-deploy-runbook",
+        "eng-oncall-runbook",
+        "notes-allhands-2026-09",
+        "notes-platform-2026-03",
+        "eng-release-calendar"
+      ],
+      "hit_at": {
+        "1": false,
+        "3": false,
+        "5": true
+      },
+      "forbidden_found": []
+    },
+    {
+      "id": "multi-01",
+      "category": "multi",
+      "top_documents": [
+        "hr-travel-booking-guide",
+        "fin-expense-policy",
+        "fin-reimbursement-sla",
+        "hr-travel-policy",
+        "ref-faq"
+      ],
+      "hit_at": {
+        "1": true,
+        "3": true,
+        "5": true
+      },
+      "forbidden_found": []
+    },
+    {
+      "id": "multi-02",
+      "category": "multi",
+      "top_documents": [
+        "hr-travel-policy",
+        "fin-expense-policy",
+        "hr-travel-booking-guide",
+        "fin-per-diem-table",
+        "hr-working-hours-holidays"
+      ],
+      "hit_at": {
+        "1": false,
+        "3": false,
+        "5": true
+      },
+      "forbidden_found": []
+    },
+    {
+      "id": "multi-03",
+      "category": "multi",
+      "top_documents": [
+        "hr-travel-policy",
+        "fin-per-diem-table",
+        "ref-faq",
+        "fin-expense-policy",
+        "hr-training-policy"
+      ],
+      "hit_at": {
+        "1": false,
+        "3": true,
+        "5": true
+      },
+      "forbidden_found": []
+    },
+    {
+      "id": "multi-04",
+      "category": "multi",
+      "top_documents": [
+        "eng-oncall-runbook",
+        "ref-benefits-overview",
+        "notes-allhands-2026-09",
+        "ref-faq",
+        "hr-travel-policy"
+      ],
+      "hit_at": {
+        "1": true,
+        "3": true,
+        "5": true
+      },
+      "forbidden_found": []
+    },
+    {
+      "id": "multi-05",
+      "category": "multi",
+      "top_documents": [
+        "hr-remote-work-policy",
+        "hr-wfh-equipment",
+        "hr-probation-policy",
+        "ref-benefits-overview",
+        "fin-expense-policy"
+      ],
+      "hit_at": {
+        "1": true,
+        "3": true,
+        "5": true
+      },
+      "forbidden_found": []
+    },
+    {
+      "id": "multi-06",
+      "category": "multi",
+      "top_documents": [
+        "eng-deploy-runbook",
+        "eng-oncall-runbook",
+        "eng-rollback-procedure",
+        "notes-platform-2026-03",
+        "it-incident-reporting"
+      ],
+      "hit_at": {
+        "1": false,
+        "3": true,
+        "5": true
+      },
+      "forbidden_found": []
+    },
+    {
+      "id": "words-01",
+      "category": "words",
+      "top_documents": [
+        "hr-training-policy",
+        "fin-procurement-policy",
+        "ref-faq",
+        "eng-oncall-runbook",
+        "it-incident-reporting"
+      ],
+      "hit_at": {
+        "1": false,
+        "3": false,
+        "5": false
+      },
+      "forbidden_found": []
+    },
+    {
+      "id": "words-02",
+      "category": "words",
+      "top_documents": [
+        "hr-remote-work-policy",
+        "hr-wfh-equipment",
+        "it-laptop-policy",
+        "eng-oncall-runbook",
+        "hr-leave-policy-v2"
+      ],
+      "hit_at": {
+        "1": true,
+        "3": true,
+        "5": true
+      },
+      "forbidden_found": []
+    },
+    {
+      "id": "words-03",
+      "category": "words",
+      "top_documents": [
+        "hr-probation-policy",
+        "it-password-policy",
+        "ref-faq",
+        "eng-oncall-runbook",
+        "hr-remote-work-policy"
+      ],
+      "hit_at": {
+        "1": true,
+        "3": true,
+        "5": true
+      },
+      "forbidden_found": []
+    },
+    {
+      "id": "words-04",
+      "category": "words",
+      "top_documents": [
+        "eng-disaster-recovery",
+        "ref-glossary",
+        "ref-handbook-index",
+        "eng-oncall-runbook",
+        "it-data-retention"
+      ],
+      "hit_at": {
+        "1": true,
+        "3": true,
+        "5": true
+      },
+      "forbidden_found": []
+    },
+    {
+      "id": "words-05",
+      "category": "words",
+      "top_documents": [
+        "it-laptop-policy",
+        "it-incident-reporting",
+        "ref-faq",
+        "ref-onboarding-checklist",
+        "eng-oncall-runbook"
+      ],
+      "hit_at": {
+        "1": true,
+        "3": true,
+        "5": true
+      },
+      "forbidden_found": []
+    },
+    {
+      "id": "clarify-01",
+      "category": "clarify",
+      "top_documents": [
+        "eng-release-calendar",
+        "team-product",
+        "org-chart",
+        "notes-platform-2026-03",
+        "team-platform"
+      ],
+      "hit_at": {
+        "1": false,
+        "3": true,
+        "5": true
+      },
+      "forbidden_found": []
+    },
+    {
+      "id": "clarify-02",
+      "category": "clarify",
+      "top_documents": [
+        "org-chart",
+        "notes-allhands-2026-09",
+        "eng-oncall-runbook",
+        "ref-faq",
+        "it-email-messaging"
+      ],
+      "hit_at": {
+        "1": true,
+        "3": true,
+        "5": true
+      },
+      "forbidden_found": []
+    },
+    {
+      "id": "clarify-03",
+      "category": "clarify",
+      "top_documents": [
+        "hr-parental-leave-policy",
+        "hr-parental-leave-policy-2027",
+        "ref-faq",
+        "hr-leave-policy-v2",
+        "notes-people-2026-06"
+      ],
+      "hit_at": {
+        "1": true,
+        "3": true,
+        "5": true
+      },
+      "forbidden_found": []
+    }
+  ]
+}

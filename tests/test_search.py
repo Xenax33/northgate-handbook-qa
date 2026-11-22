@@ -55,6 +55,21 @@ def test_top_documents_groups_passages_by_document(searcher):
 # Building blocks ------------------------------------------------------------------------------------
 
 
+def test_bge_queries_get_the_search_instruction_and_passages_do_not(embedder):
+    import numpy as np
+
+    from handbook_qa.search.semantic import BGE_QUERY_INSTRUCTION, query_instruction
+
+    assert query_instruction("BAAI/bge-small-en-v1.5") == BGE_QUERY_INSTRUCTION
+    assert query_instruction("sentence-transformers/all-MiniLM-L6-v2") == ""
+    question = "how many leave days"
+    as_query = embedder.query(question)
+    as_passage = embedder.passages([question])[0]
+    with_instruction = embedder.passages([BGE_QUERY_INSTRUCTION + question])[0]
+    assert not np.allclose(as_query, as_passage)
+    assert np.allclose(as_query, with_instruction)
+
+
 def test_rrf_rewards_items_both_rankings_like():
     fused = [item for item, _ in reciprocal_rank_fusion([[1, 2, 3], [4, 2, 5]])]
     assert fused[0] == 2  # 2nd in both beats 1st in only one of them
