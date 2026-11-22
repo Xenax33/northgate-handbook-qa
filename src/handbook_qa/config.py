@@ -32,12 +32,18 @@ def load_dotenv(path: Path = PROJECT_ROOT / ".env") -> None:
         os.environ.setdefault(key.strip(), value.strip().strip("\"'"))
 
 
+GEMINI_OPENAI_URL = "https://generativelanguage.googleapis.com/v1beta/openai/"
+
+
 @dataclass(frozen=True)
 class Settings:
     corpus_dir: Path
     model_cache: Path
     embedding_model: str
     fixed_today: date | None  # set for the eval, so date-dependent answers don't drift
+    llm_base_url: str  # any OpenAI-compatible endpoint (D13); Gemini by default
+    llm_model: str
+    llm_api_key: str | None  # never logged or printed
 
     def today(self) -> date:
         return self.fixed_today or date.today()
@@ -46,9 +52,16 @@ class Settings:
 def get_settings() -> Settings:
     load_dotenv()
     today = os.environ.get("HANDBOOK_TODAY")
+    try:
+        fixed_today = date.fromisoformat(today) if today else None
+    except ValueError as error:
+        raise ValueError(f"HANDBOOK_TODAY must be YYYY-MM-DD, got {today!r}") from error
     return Settings(
         corpus_dir=Path(os.environ.get("HANDBOOK_CORPUS", DEFAULT_CORPUS)),
         model_cache=Path(os.environ.get("HANDBOOK_MODEL_CACHE", DEFAULT_MODEL_CACHE)),
         embedding_model=os.environ.get("EMBEDDING_MODEL", "BAAI/bge-small-en-v1.5"),
-        fixed_today=date.fromisoformat(today) if today else None,
+        fixed_today=fixed_today,
+        llm_base_url=os.environ.get("LLM_BASE_URL", GEMINI_OPENAI_URL),
+        llm_model=os.environ.get("LLM_MODEL", "gemini-3.1-flash-lite"),
+        llm_api_key=os.environ.get("LLM_API_KEY") or os.environ.get("GEMINI_API_KEY"),
     )
