@@ -10,6 +10,9 @@ wheels/
 # Virtual environments
 .venv
 
+# Downloaded embedding model (about 67 MB, fetched on first run)
+.cache/
+
 # Secrets: the Gemini API key lives here and must never be committed
 .env
 

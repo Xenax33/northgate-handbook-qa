@@ -5,6 +5,8 @@ description = "Q&A assistant over the Northgate Robotics handbook, with sources"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "bm25s>=0.3.16",
+    "fastembed>=0.9.1",
     "pypdf>=7.1.1",
     "python-docx>=1.2.0",
 ]
