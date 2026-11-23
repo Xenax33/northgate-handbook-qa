@@ -11,6 +11,7 @@ but missing, three people called Maya. The assistant is built around those traps
 - **Why it is built this way:** [DECISIONS.md](DECISIONS.md)
 - **How AI was used:** [AI_USAGE.md](AI_USAGE.md)
 - **The test questions and scoring rules:** [eval/README.md](eval/README.md)
+- **Live demo:** https://northgate-handbook-qa.onrender.com (free plan: the first visit after a quiet spell takes about a minute to wake up)
 
 ## At a glance
 
@@ -129,7 +130,7 @@ Prompt); macOS/Linux differences are noted.
 |---|---|---|
 | Python 3.12 or newer | [python.org/downloads](https://www.python.org/downloads/). On Windows tick **"Add python.exe to PATH"** | `python --version` |
 | Git | [git-scm.com/downloads](https://git-scm.com/downloads) | `git --version` |
-| uv | `python -m pip install uv` (**not** `--user`; see troubleshooting if `uv` isn't found) | `uv --version` |
+| uv | `python -m pip install uv` (**not** `--user`; see [If the `uv` command doesn't work](#if-the-uv-command-doesnt-work)) | `uv --version` |
 
 Open a **new** terminal after installing, so it picks up the updated PATH.
 
@@ -166,11 +167,49 @@ uv run handbook-web
 Open http://127.0.0.1:8000. Stop it with `Ctrl+C`. Without a key the page still opens and the document browser
 works; asking a question explains how to add the key.
 
+### If the `uv` command doesn't work
+
+Try these in order.
+
+1. **Open a new terminal** and run `uv --version` again. A terminal opened before uv was installed doesn't see it.
+2. **Check whether uv is installed but not on PATH:**
+   ```bash
+   python -m uv --version
+   ```
+   If that prints a version, uv was installed with `--user` into a folder that isn't on PATH. Either fix it:
+   ```bash
+   python -m pip install --ignore-installed uv
+   ```
+   and open a new terminal (plain `python -m pip install uv` only says "already satisfied"), **or** type `python -m uv`
+   wherever this README says `uv`: `python -m uv sync`, `python -m uv run pytest -q`, `python -m uv run handbook-web`.
+3. **If uv isn't installed at all:** `python -m pip install uv` (not `--user`), then a new terminal. If `python` itself
+   isn't found, see the troubleshooting table below.
+4. **Skip uv entirely.** Plain Python works too (tested on Windows with Python 3.12: all tests pass, the app runs):
+   ```bash
+   python -m venv .venv
+   .venv\Scripts\python -m pip install -e . pytest httpx
+   ```
+   (macOS/Linux: `.venv/bin/python -m pip install -e . pytest httpx`.) Then use the environment's programs instead of `uv run`:
+
+   | With uv | Without uv (Windows) | Without uv (macOS/Linux) |
+   |---|---|---|
+   | `uv run pytest -q` | `.venv\Scripts\python -m pytest -q` | `.venv/bin/python -m pytest -q` |
+   | `uv run handbook-web` | `.venv\Scripts\handbook-web` | `.venv/bin/handbook-web` |
+   | `uv run python <script or -m module>` | `.venv\Scripts\python <script or -m module>` | `.venv/bin/python <...>` |
+
+   For example: `.venv\Scripts\python eval\run_eval.py`. In Command Prompt you can also run `.venv\Scripts\activate`
+   once and then drop the prefix (`pytest -q`, `handbook-web`). PowerShell may refuse to run `Activate.ps1`; use the
+   `.venv\Scripts\...` form there instead.
+
+   The difference: pip installs the newest compatible versions, while `uv sync` installs the exact versions in
+   `uv.lock` (the same today, but they can drift over time).
+
 ### Troubleshooting
 
 | Problem | Fix |
 |---|---|
 | `'uv' is not recognized` but `python -m uv --version` works | uv was installed with `--user`, into a folder that isn't on PATH. Run `python -m pip install --ignore-installed uv`, then open a new terminal. (Plain `python -m pip install uv` says "already satisfied" and changes nothing.) Or use `python -m uv` instead of `uv` everywhere |
+| `uv` doesn't work at all | Follow [If the `uv` command doesn't work](#if-the-uv-command-doesnt-work) above; step 4 runs everything with plain Python and pip |
 | `'python' is not recognized` | Python isn't on PATH. Re-run the installer, choose *Modify*, tick *Add Python to environment variables*; or use `py` instead of `python` |
 | First run prints `To support symlinks on Windows…` or `You are sending unauthenticated requests to the HF Hub` | Harmless warnings from the model download (Hugging Face). The model is copied instead of linked; no token is needed |
 | The model download fails (proxy or no internet) | The search model must be downloaded once into `.cache/models/`. Connect, run `uv run pytest -q` once, and it works offline afterwards |
