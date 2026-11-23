@@ -1,0 +1,91 @@
+{
+  "kind": "eval",
+  "run_at": "2026-11-23T14:04:09",
+  "label": "after reverting the run-4 prompt tweak (D23): lookup-10 should answer again",
+  "git_commit": "f70b162+uncommitted",
+  "today": "2026-11-22",
+  "model": "gemini-3.1-flash-lite",
+  "embedding_model": "BAAI/bge-small-en-v1.5",
+  "questions_asked": 1,
+  "model_requests": 1,
+  "retries": [],
+  "per_question": [
+    {
+      "id": "lookup-10",
+      "category": "lookup",
+      "question": "Who is the Security Lead?",
+      "status": "answer",
+      "answer": "The Security Lead is Tyler Rodriguez.",
+      "citations": [
+        {
+          "key": "P1",
+          "doc_id": "org-chart",
+          "heading": null,
+          "quote": "name: Tyler Rodriguez, role: Security Lead, team: Security, location: Austin",
+          "verified": true,
+          "problem": null
+        }
+      ],
+      "warnings": [],
+      "documents_read": [
+        "org-chart",
+        "sec-security-policy",
+        "it-incident-reporting",
+        "ref-onboarding-checklist",
+        "support-escalation"
+      ],
+      "passages_read": 7,
+      "prompt_tokens": 1164,
+      "completion_tokens": 80,
+      "seconds": 4.5,
+      "model_calls": 1,
+      "searched_again_with": null,
+      "first_status": null,
+      "measures": {
+        "retrieval": true,
+        "facts": true,
+        "citation": true,
+        "behaviour": true
+      },
+      "passed": true,
+      "reasons": []
+    }
+  ],
+  "seconds_total": 5,
+  "summary": {
+    "passed": [
+      1,
+      1
+    ],
+    "measures": {
+      "retrieval": [
+        1,
+        1
+      ],
+      "facts": [
+        1,
+        1
+      ],
+      "citation": [
+        1,
+        1
+      ],
+      "behaviour": [
+        1,
+        1
+      ]
+    },
+    "categories": {
+      "lookup": [
+        1,
+        1
+      ]
+    },
+    "unverified_quotes": 0,
+    "answers_with_warnings": 0,
+    "errors": 0,
+    "searched_again": 0,
+    "prompt_tokens": 1164,
+    "completion_tokens": 80
+  }
+}

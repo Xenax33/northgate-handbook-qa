@@ -1,0 +1,109 @@
+{
+  "kind": "eval",
+  "run_at": "2026-11-23T13:29:41",
+  "label": "run 4 check: is the lookup-10 clarify repeatable with the new prompt?",
+  "git_commit": "f70b162+uncommitted",
+  "today": "2026-11-22",
+  "model": "gemini-3.1-flash-lite",
+  "embedding_model": "BAAI/bge-small-en-v1.5",
+  "questions_asked": 1,
+  "model_requests": 1,
+  "retries": [],
+  "per_question": [
+    {
+      "id": "lookup-10",
+      "category": "lookup",
+      "question": "Who is the Security Lead?",
+      "status": "clarify",
+      "answer": "There are multiple employees named Tyler at Northgate Robotics. Please clarify if you are referring to Tyler Anderson (Chief Technology Officer), Tyler Martinez (IT Lead), or Tyler Rodriguez (Security Lead).",
+      "citations": [
+        {
+          "key": "P1",
+          "doc_id": "org-chart",
+          "heading": null,
+          "quote": "name: Tyler Anderson, role: Chief Technology Officer, team: Leadership, location: Austin",
+          "verified": true,
+          "problem": null
+        },
+        {
+          "key": "P1",
+          "doc_id": "org-chart",
+          "heading": null,
+          "quote": "name: Tyler Martinez, role: IT Lead, team: IT Operations, location: Denver",
+          "verified": true,
+          "problem": null
+        },
+        {
+          "key": "P1",
+          "doc_id": "org-chart",
+          "heading": null,
+          "quote": "name: Tyler Rodriguez, role: Security Lead, team: Security, location: Austin",
+          "verified": true,
+          "problem": null
+        }
+      ],
+      "warnings": [],
+      "documents_read": [
+        "org-chart",
+        "sec-security-policy",
+        "it-incident-reporting",
+        "ref-onboarding-checklist",
+        "support-escalation"
+      ],
+      "passages_read": 7,
+      "prompt_tokens": 1200,
+      "completion_tokens": 193,
+      "seconds": 1.66,
+      "model_calls": 1,
+      "searched_again_with": null,
+      "first_status": null,
+      "measures": {
+        "retrieval": true,
+        "facts": true,
+        "citation": true,
+        "behaviour": false
+      },
+      "passed": false,
+      "reasons": [
+        "behaviour: got 'clarify', expected answer"
+      ]
+    }
+  ],
+  "seconds_total": 2,
+  "summary": {
+    "passed": [
+      0,
+      1
+    ],
+    "measures": {
+      "retrieval": [
+        1,
+        1
+      ],
+      "facts": [
+        1,
+        1
+      ],
+      "citation": [
+        1,
+        1
+      ],
+      "behaviour": [
+        0,
+        1
+      ]
+    },
+    "categories": {
+      "lookup": [
+        0,
+        1
+      ]
+    },
+    "unverified_quotes": 0,
+    "answers_with_warnings": 0,
+    "errors": 0,
+    "searched_again": 0,
+    "prompt_tokens": 1200,
+    "completion_tokens": 193
+  }
+}

@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Northgate Handbook Q&amp;A</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <h1>Northgate Handbook</h1>
+      <p class="tagline">Ask about policies, runbooks, benefits and teams. Every answer shows the passage it comes from.</p>
+      <p class="meta" id="meta">Loading the handbook…</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="banner warn" id="no-key" hidden>
+      No API key is set, so questions can't be answered yet. Add <code>GEMINI_API_KEY=...</code> to the <code>.env</code> file and restart.
+      You can still browse the documents below.
+    </div>
+
+    <form id="ask-form" class="ask" autocomplete="off">
+      <label for="question">Your question</label>
+      <div class="ask-row">
+        <input id="question" name="question" type="text" maxlength="1000" required
+               placeholder="How many days of annual leave do I get?">
+        <button type="submit" id="ask-button">Ask</button>
+      </div>
+      <p class="field-error" id="question-error" hidden></p>
+      <div class="examples" aria-label="Example questions">
+        <span>Try:</span>
+        <button type="button" class="chip">Who approves a replacement laptop?</button>
+        <button type="button" class="chip">What is the hotel limit in Chicago?</button>
+        <button type="button" class="chip">When does the next deploy freeze start?</button>
+      </div>
+    </form>
+
+    <section id="result" class="result" aria-live="polite" hidden></section>
+
+    <details class="browse" id="browse">
+      <summary>Browse all handbook documents</summary>
+      <p class="hint">Superseded and deprecated documents are kept for reference but never used to answer.</p>
+      <ul id="doc-list" class="doc-list"></ul>
+    </details>
+  </main>
+
+  <dialog id="viewer" aria-labelledby="viewer-title">
+    <div class="viewer-head">
+      <div>
+        <h2 id="viewer-title"></h2>
+        <p class="meta" id="viewer-meta"></p>
+      </div>
+      <button type="button" class="close" id="viewer-close" aria-label="Close">×</button>
+    </div>
+    <div class="viewer-body" id="viewer-body"></div>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>

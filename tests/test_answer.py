@@ -2,37 +2,17 @@
 model: which passages it reads, what the prompt tells it, and how its JSON is checked."""
 
 from datetime import date
-from pathlib import Path
 
 import pytest
 
 from handbook_qa.answer import UNVERIFIED, Assistant
 from handbook_qa.answer.citations import check_citations, quote_in
 from handbook_qa.answer.context import SMALL_DOCUMENT_CHARS, ContextPassage, build_context
-from handbook_qa.answer.llm import Completion, LLMError, OpenAICompatibleModel, redact
-from handbook_qa.config import Settings
+from handbook_qa.answer.llm import LLMError, OpenAICompatibleModel, redact
 from handbook_qa.ingest import State
 from handbook_qa.passages import Passage
 
-from conftest import CORPUS, TODAY
-
-
-class FakeModel:
-    """Replies with `reply`, or with each reply of a list in turn (for the second search, D20)."""
-
-    name = "fake"
-
-    def __init__(self, reply):
-        self.replies = reply if isinstance(reply, list) else [reply]
-        self.calls: list[tuple[str, str]] = []
-
-    def complete_json(self, system, user, schema):
-        self.calls.append((system, user))
-        return Completion(self.replies[min(len(self.calls), len(self.replies)) - 1], 100, 20, 0.01)
-
-
-SETTINGS = Settings(corpus_dir=CORPUS, model_cache=Path(".cache/models"), embedding_model="BAAI/bge-small-en-v1.5",
-                    fixed_today=TODAY, llm_base_url="http://unused", llm_model="fake", llm_api_key=None)
+from conftest import SETTINGS, TODAY, FakeModel
 
 
 @pytest.fixture(scope="module")

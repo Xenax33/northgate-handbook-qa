@@ -20,3 +20,6 @@ wheels/
 .vscode/
 .idea/
 .DS_Store
+
+# Local tool settings
+.claude/

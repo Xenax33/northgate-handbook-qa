@@ -3,7 +3,8 @@ from pathlib import Path
 
 import pytest
 
-from handbook_qa.config import get_settings
+from handbook_qa.answer.llm import Completion
+from handbook_qa.config import Settings, get_settings
 from handbook_qa.ingest import load_corpus
 from handbook_qa.passages import build_passages
 
@@ -37,3 +38,21 @@ def searcher(passages, embedder):
     from handbook_qa.search import Searcher
 
     return Searcher(passages, embedder)
+
+
+class FakeModel:
+    """Replies with `reply`, or with each reply of a list in turn (for the second search, D20)."""
+
+    name = "fake"
+
+    def __init__(self, reply):
+        self.replies = reply if isinstance(reply, list) else [reply]
+        self.calls: list[tuple[str, str]] = []
+
+    def complete_json(self, system, user, schema):
+        self.calls.append((system, user))
+        return Completion(self.replies[min(len(self.calls), len(self.replies)) - 1], 100, 20, 0.01)
+
+
+SETTINGS = Settings(corpus_dir=CORPUS, model_cache=CORPUS.parents[1] / ".cache" / "models", embedding_model="BAAI/bge-small-en-v1.5",
+                    fixed_today=TODAY, llm_base_url="http://unused", llm_model="fake", llm_api_key=None)
