@@ -73,7 +73,9 @@ async function getJson(url, options) {
   const response = await fetch(url, options);
   const body = await response.json().catch(() => ({}));
   if (!response.ok) {
-    const detail = Array.isArray(body.detail) ? "Enter a question of up to 1,000 characters." : body.detail;
+    const detail = Array.isArray(body.detail)  // FastAPI's field validation errors
+      ? "Some of what was sent is missing or too long: " + body.detail.map((d) => (d.loc || []).slice(-1)[0]).join(", ") + "."
+      : body.detail;
     throw new Error(detail || `The server answered ${response.status}.`);
   }
   return body;
@@ -81,19 +83,81 @@ async function getJson(url, options) {
 
 // Header line and document list ---------------------------------------------------------------------
 
+let health = null;
+
 async function loadOverview() {
   try {
-    const health = await getJson("/api/health");
+    health = await getJson("/api/health");
     $("meta").textContent = `${health.documents} documents · answers by ${health.model} · today ${health.today}`;
     $("no-key").hidden = health.api_key_set;
-    const docs = await getJson("/api/documents");
-    $("doc-list").innerHTML = docs
-      .sort((a, b) => a.title.localeCompare(b.title))
-      .map((d) => `<li><button type="button" class="link-button" data-doc="${escapeHtml(d.doc_id)}">${escapeHtml(d.title)}</button>
-        <span class="meta">${escapeHtml(d.format)}</span>${STATE_LABEL[d.state] ? `<span class="badge state">${STATE_LABEL[d.state]}</span>` : ""}</li>`)
+    $("upload-box").hidden = !health.uploads_enabled;
+    $("token-row").hidden = !health.upload_token_required;
+    $("upload-file").accept = health.upload_formats.map((f) => "." + f).join(",");
+    $("upload-hint").textContent = `Upload a ${health.upload_formats.join(", ")} file of up to ${health.max_upload_mb} MB; ` +
+      "questions can use it straight away. If it replaces a document, that one stops being used for answers.";
+    if (!$("upload-date").value) $("upload-date").value = health.today;
+    const docs = (await getJson("/api/documents")).sort((a, b) => a.title.localeCompare(b.title));
+    $("doc-list").innerHTML = docs.map((d) => `<li><button type="button" class="link-button" data-doc="${escapeHtml(d.doc_id)}">${escapeHtml(d.title)}</button>
+        <span class="meta">${escapeHtml(d.format)}</span>${STATE_LABEL[d.state] ? `<span class="badge state">${STATE_LABEL[d.state]}</span>` : ""}${
+        d.source === "upload" ? `<span class="badge uploaded">Uploaded</span><button type="button" class="link-button remove" data-remove="${escapeHtml(d.doc_id)}">Remove</button>` : ""}</li>`)
       .join("");
+    const choosable = docs.filter((d) => d.state !== "superseded" && d.state !== "deprecated");
+    $("upload-replaces").innerHTML = `<option value="">Nothing (a new document)</option>` +
+      choosable.map((d) => `<option value="${escapeHtml(d.doc_id)}">${escapeHtml(d.title)}</option>`).join("");
   } catch (error) {
     $("meta").textContent = `Couldn't load the handbook: ${error.message}`;
+  }
+}
+
+// Uploading (D24-D26) ----------------------------------------------------------------------------------
+
+function uploadHeaders() {
+  const token = $("upload-token").value;
+  return token ? { "X-Upload-Token": token } : {};
+}
+
+function showUploadError(message) {
+  $("upload-error").textContent = message;
+  $("upload-error").hidden = false;
+  $("upload-done").hidden = true;
+}
+
+async function upload(event) {
+  event.preventDefault();
+  const file = $("upload-file").files[0];
+  $("upload-error").hidden = true;
+  if (!file) return showUploadError("Choose a file first.");
+  if (file.size > health.max_upload_mb * 1_000_000) return showUploadError(`The file is larger than ${health.max_upload_mb} MB.`);
+  if (!$("upload-title").value.trim()) return showUploadError("Give the document a title.");
+  if (health.upload_token_required && !$("upload-token").value) return showUploadError("Enter the upload token.");
+  const form = new FormData($("upload-form"));
+  const button = $("upload-button");
+  button.setAttribute("aria-busy", "true");
+  button.textContent = "Adding…";
+  try {
+    const added = await getJson("/api/documents", { method: "POST", body: form, headers: uploadHeaders() });
+    $("upload-done").textContent = `Added “${added.title}”` +
+      (added.state === "not yet in force" ? ` (in force from ${added.effective_date})` : "") +
+      (added.supersedes ? `; it replaces ${added.supersedes}` : "") + ". Ask a question about it now.";
+    $("upload-done").hidden = false;
+    $("upload-file").value = "";
+    $("upload-title").value = "";
+    await loadOverview();
+  } catch (error) {
+    showUploadError(error.message);
+  } finally {
+    button.removeAttribute("aria-busy");
+    button.textContent = "Add document";
+  }
+}
+
+async function removeUpload(docId) {
+  if (!confirm(`Remove the uploaded document ${docId}? Questions will stop using it.`)) return;
+  try {
+    await getJson(`/api/documents/${encodeURIComponent(docId)}`, { method: "DELETE", headers: uploadHeaders() });
+    await loadOverview();
+  } catch (error) {
+    alert(error.message);
   }
 }
 
@@ -132,12 +196,13 @@ async function ask(question) {
 function renderAnswer(a) {
   const sources = a.citations.map((c, i) => {
     const where = c.title ? escapeHtml(c.title) + (c.heading ? ` › ${escapeHtml(c.heading)}` : "") : `Unknown passage ${escapeHtml(c.key)}`;
+    const uploaded = c.source === "upload" ? `<span class="badge uploaded">Uploaded, not from the handbook</span>` : "";
     const state = STATE_LABEL[c.state] ? `<span class="badge state">${STATE_LABEL[c.state]}${c.state === "not yet in force" ? ` from ${escapeHtml(c.effective_date)}` : ""}</span>` : "";
     const check = c.verified
       ? `<span class="verified">✓ Quote found in the document</span>`
       : `<span class="unverified">✗ ${escapeHtml(c.problem || "Quote not verified")}</span>`;
     const open = c.doc_id ? `<button type="button" class="link-button" data-cite="${i}">Open source</button>` : "";
-    return `<div class="source"><div class="source-title">${where}${state}</div>
+    return `<div class="source"><div class="source-title">${where}${state}${uploaded}</div>
       <blockquote>${escapeHtml(readableQuote(c.quote))}</blockquote>
       <div class="source-foot">${check}${open}</div></div>`;
   }).join("");
@@ -197,6 +262,12 @@ $("result").addEventListener("click", (event) => {
 });
 $("doc-list").addEventListener("click", (event) => {
   if (event.target.dataset?.doc) openDocument(event.target.dataset.doc, null, null);
+  if (event.target.dataset?.remove) removeUpload(event.target.dataset.remove);
+});
+$("upload-form").addEventListener("submit", upload);
+$("upload-file").addEventListener("change", () => {
+  const file = $("upload-file").files[0];
+  if (file && !$("upload-title").value) $("upload-title").value = file.name.replace(/\.[^.]+$/, "").replace(/[-_]+/g, " ");
 });
 $("viewer-close").addEventListener("click", () => $("viewer").close());
 $("viewer").addEventListener("click", (event) => { if (event.target === $("viewer")) $("viewer").close(); });

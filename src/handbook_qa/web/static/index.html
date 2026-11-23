@@ -39,6 +39,28 @@
 
     <section id="result" class="result" aria-live="polite" hidden></section>
 
+    <details class="browse" id="upload-box" hidden>
+      <summary>Add a document</summary>
+      <p class="hint" id="upload-hint">Upload a policy or note; questions can use it straight away.</p>
+      <form id="upload-form" class="upload" autocomplete="off">
+        <label for="upload-file">File</label>
+        <input id="upload-file" name="file" type="file" required>
+        <label for="upload-title">Title</label>
+        <input id="upload-title" name="title" type="text" maxlength="200" required placeholder="Leave Policy v3">
+        <label for="upload-date">Effective from</label>
+        <input id="upload-date" name="effective_date" type="date" required>
+        <label for="upload-replaces">Replaces</label>
+        <select id="upload-replaces" name="replaces"><option value="">Nothing (a new document)</option></select>
+        <div id="token-row" hidden>
+          <label for="upload-token">Upload token</label>
+          <input id="upload-token" type="password" autocomplete="off">
+        </div>
+        <div><button type="submit" id="upload-button" class="primary">Add document</button></div>
+        <p class="field-error" id="upload-error" role="alert" hidden></p>
+        <p class="note" id="upload-done" role="status" hidden></p>
+      </form>
+    </details>
+
     <details class="browse" id="browse">
       <summary>Browse all handbook documents</summary>
       <p class="hint">Superseded and deprecated documents are kept for reference but never used to answer.</p>

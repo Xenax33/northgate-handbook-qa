@@ -6,15 +6,22 @@
     GET  /api/documents             every document with its state (current, superseded, ...)
     GET  /api/documents/{doc_id}    one document's passages, for the source viewer
     GET  /api/documents/{doc_id}/file   the original file (PDF, Word, ...)
+    POST /api/documents             upload a document (multipart form: file, title, effective_date, replaces)
+    DELETE /api/documents/{doc_id}  remove an uploaded document
+
+Uploads (D24-D26) need the X-Upload-Token header when UPLOAD_TOKEN is set on the server; after an upload
+or removal the assistant re-reads everything, so the next question can use it without a restart.
 
 Errors come back as {"detail": "..."} with a message that is safe to show: the model client already
 removes keys and account ids from provider errors.
 """
 
+import hmac
 from contextlib import asynccontextmanager
+from datetime import date
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, File, Form, Header, HTTPException, UploadFile
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
@@ -22,6 +29,8 @@ from pydantic import BaseModel, Field
 from handbook_qa.answer import MAX_QUESTION_CHARS, Answer, Assistant, LLMError
 from handbook_qa.answer.llm import Completion
 from handbook_qa.config import get_settings
+from handbook_qa.ingest import SUPPORTED_FORMATS
+from handbook_qa.ingest.uploads import MAX_UPLOAD_BYTES, UploadError, remove_upload, save_upload
 
 STATIC = Path(__file__).parent / "static"
 
@@ -65,6 +74,10 @@ def create_app(assistant: Assistant | None = None) -> FastAPI:
             "model": a.model.name,
             "today": a.settings.today().isoformat(),
             "api_key_set": not isinstance(a.model, MissingKeyModel),
+            "uploads_enabled": a.settings.uploads_dir is not None,
+            "upload_token_required": bool(a.settings.upload_token),
+            "upload_formats": list(SUPPORTED_FORMATS),
+            "max_upload_mb": MAX_UPLOAD_BYTES / 1_000_000,
         }
 
     @app.post("/api/ask")
@@ -100,11 +113,58 @@ def create_app(assistant: Assistant | None = None) -> FastAPI:
         doc = a.documents.get(doc_id)
         if doc is None:
             raise HTTPException(status_code=404, detail=f"No document called {doc_id!r}.")
-        corpus = a.settings.corpus_dir.resolve()
-        path = (corpus / doc.path).resolve()
-        if corpus not in path.parents or not path.is_file():  # never serve anything outside the corpus folder
+        folder = (a.settings.uploads_dir if doc.source == "upload" else a.settings.corpus_dir)
+        folder = folder.resolve() if folder else None
+        path = (folder / doc.path).resolve() if folder else None
+        if path is None or folder not in path.parents or not path.is_file():  # only files inside their own folder
             raise HTTPException(status_code=404, detail="The original file is not available.")
         return FileResponse(path, filename=path.name)
+
+    def check_uploads_allowed(token: str | None) -> Assistant:
+        a: Assistant = app.state.assistant
+        if a.settings.uploads_dir is None:
+            raise HTTPException(status_code=403, detail="Uploads are switched off on this server.")
+        expected = a.settings.upload_token
+        if expected and not hmac.compare_digest((token or "").encode(), expected.encode()):
+            raise HTTPException(status_code=401, detail="The upload token is missing or wrong.")
+        return a
+
+    @app.post("/api/documents", status_code=201)
+    def upload(
+        file: UploadFile = File(...),
+        title: str = Form(""),
+        effective_date: str = Form(""),
+        replaces: str = Form(""),
+        x_upload_token: str | None = Header(default=None),
+    ) -> dict:
+        a = check_uploads_allowed(x_upload_token)
+        content = file.file.read(MAX_UPLOAD_BYTES + 1)  # never read more than the limit
+        try:
+            effective = date.fromisoformat(effective_date) if effective_date else a.settings.today()
+        except ValueError:
+            raise HTTPException(status_code=400, detail="The effective date must look like 2026-11-23.") from None
+        try:
+            entry = save_upload(a.settings.uploads_dir, file.filename or "", content, title or Path(file.filename or "").stem,
+                                effective, replaces or None, set(a.documents))
+        except UploadError as error:
+            raise HTTPException(status_code=400, detail=str(error)) from None
+        try:
+            a.reload()
+        except Exception:  # a file that read fine alone but breaks the whole load: take it out again
+            remove_upload(a.settings.uploads_dir, entry["doc_id"])
+            a.reload()
+            raise HTTPException(status_code=400, detail="The document couldn't be added to the handbook.") from None
+        return document_summary(a.documents[entry["doc_id"]])
+
+    @app.delete("/api/documents/{doc_id}")
+    def remove(doc_id: str, x_upload_token: str | None = Header(default=None)) -> dict:
+        a = check_uploads_allowed(x_upload_token)
+        try:
+            remove_upload(a.settings.uploads_dir, doc_id)
+        except UploadError as error:
+            raise HTTPException(status_code=400, detail=str(error)) from None
+        a.reload()
+        return {"removed": doc_id}
 
     app.mount("/", StaticFiles(directory=STATIC, html=True), name="page")
     return app
@@ -120,6 +180,8 @@ def document_summary(doc) -> dict:
         "effective_date": doc.effective_date.isoformat(),
         "state": doc.state.value,
         "superseded_by": doc.superseded_by,
+        "supersedes": doc.supersedes,
+        "source": doc.source,
     }
 
 
@@ -141,6 +203,7 @@ def answer_json(answer: Answer, assistant: Assistant) -> dict:
                 "heading": c.passage.heading if c.passage else None,
                 "state": c.passage.state.value if c.passage else None,
                 "effective_date": c.passage.effective_date.isoformat() if c.passage else None,
+                "source": assistant.documents[c.passage.doc_id].source if c.passage and c.passage.doc_id in assistant.documents else None,
             }
             for c in answer.citations
         ],

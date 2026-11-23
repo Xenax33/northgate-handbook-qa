@@ -9,7 +9,10 @@ from handbook_qa.answer.context import ContextPassage
 from handbook_qa.evaluation.text_match import normalise
 from handbook_qa.passages import Passage
 
-ELLIPSIS = re.compile(r"\s*(?:\.\.\.|…)\s*")
+# Parts of a quote: split at "..." and at line breaks. Each part must appear in the passage, in order.
+# Line breaks were added after eval run 5: the model quoted three separate org-chart rows as one
+# multi-line quote (rows 1, 3 and 4), which is the same as shortening with "...".
+ELLIPSIS = re.compile(r"\s*(?:\.\.\.|…|\n)\s*")
 
 
 @dataclass(frozen=True)

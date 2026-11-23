@@ -24,11 +24,12 @@ def main(argv: list[str]) -> int:
         return 0
     settings = get_settings()
     today = settings.today()
-    documents = load_corpus(settings.corpus_dir, today)
+    documents = load_corpus(settings.corpus_dir, today, settings.uploads_dir)
     print(f"{len(documents)} documents, states on {today}:")
     for doc in documents:
         extra = f" (by {doc.superseded_by})" if doc.superseded_by else ""
-        print(f"  {doc.state.value:17} {doc.format:5} {len(doc.sections):2} sections  {doc.doc_id}{extra}")
+        uploaded = "  [uploaded]" if doc.source == "upload" else ""
+        print(f"  {doc.state.value:17} {doc.format:5} {len(doc.sections):2} sections  {doc.doc_id}{extra}{uploaded}")
     return 0
 
 

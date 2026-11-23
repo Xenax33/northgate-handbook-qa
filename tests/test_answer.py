@@ -183,6 +183,10 @@ def test_quote_matching_rules():
     assert not quote_in("credited each pay period ... accrue 16 days", text)  # parts out of order
     assert not quote_in("accrue 18 days", text)
     assert not quote_in("...", text)
+    rows = "name: Tyler Anderson, role: CTO\nname: Jamal Rivera, role: Head of People\nname: Tyler Martinez, role: IT Lead"
+    assert quote_in("name: Tyler Anderson, role: CTO\nname: Tyler Martinez, role: IT Lead", rows)  # rows 1 and 3 (eval run 5)
+    assert not quote_in("name: Tyler Martinez, role: IT Lead\nname: Tyler Anderson, role: CTO", rows)  # out of order
+    assert not quote_in("name: Tyler Anderson, role: CTO\nname: Maya Park, role: Head of Product", rows)  # invented row
 
 
 def test_citation_keys_are_cleaned_and_quotes_unquoted():

@@ -85,3 +85,18 @@ def test_keyword_index_edge_cases():
     index = KeywordIndex(["VPN sessions limit", "annual leave days"])
     assert index.rank("the and of") == []  # only stopwords
     assert index.rank("VPN") == [0]  # passages sharing no word are left out
+
+
+def test_passage_vectors_are_saved_and_reused_after_a_restart(embedder, tmp_path, monkeypatch):
+    import numpy as np
+
+    texts = ["VPN sessions are limited to two.", "Annual leave is sixteen days."]
+    monkeypatch.setattr(embedder, "vector_file", tmp_path / "vectors.npz")  # restored after the test
+    first = embedder.passages(texts)
+    embedder.save()
+    assert embedder.vector_file.is_file()
+
+    # A "restarted" process: same file, empty memory, and no model, so any recomputation would fail.
+    monkeypatch.setattr(embedder, "_known", embedder._load())
+    monkeypatch.setattr(embedder, "model", None)
+    assert np.allclose(embedder.passages(texts), first)

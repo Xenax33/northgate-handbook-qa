@@ -19,7 +19,7 @@ def main(argv: list[str]) -> int:
     question = " ".join(argv)
     settings = get_settings()
     searcher = Searcher(
-        build_passages(load_corpus(settings.corpus_dir, settings.today())),
+        build_passages(load_corpus(settings.corpus_dir, settings.today(), settings.uploads_dir)),
         Embedder(settings.embedding_model, settings.model_cache),
     )
     print(f"Question: {question}\n")

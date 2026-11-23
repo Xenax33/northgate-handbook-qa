@@ -31,6 +31,8 @@ def test_the_page_and_its_files_are_served(client):
 def test_health(client):
     assert client.get("/api/health").json() == {
         "documents": 64, "passages": 122, "model": "fake", "today": "2026-11-22", "api_key_set": True,
+        "uploads_enabled": False, "upload_token_required": False,
+        "upload_formats": ["csv", "docx", "html", "md", "pdf", "txt"], "max_upload_mb": 1.0,
     }
 
 
@@ -48,6 +50,7 @@ def test_ask_returns_the_answer_with_checked_sources(client, assistant):
     assert citation["verified"] is True
     assert citation["doc_id"] == "hr-leave-policy-v2" and citation["heading"] == "2. Annual leave"
     assert citation["passage_id"].startswith("hr-leave-policy-v2#")
+    assert citation["source"] == "handbook"  # the page shows an "Uploaded" badge when this says "upload"
     assert "hr-leave-policy-v1" not in body["documents_read"]
 
 

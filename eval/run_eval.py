@@ -48,7 +48,7 @@ def main() -> int:
     parser.add_argument("--label", default="", help="a note saved with the run")
     args = parser.parse_args()
 
-    settings = replace(get_settings(), fixed_today=EVAL_TODAY)
+    settings = replace(get_settings(), fixed_today=EVAL_TODAY, uploads_dir=None)  # official handbook only, never uploads
     model = OpenAICompatibleModel(settings.llm_base_url, settings.llm_model, settings.llm_api_key, max_retries=0)
     assistant = Assistant(settings, model=model)
     questions = load_questions(QUESTIONS, set(assistant.documents))

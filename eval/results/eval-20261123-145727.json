@@ -1,0 +1,1788 @@
+{
+  "kind": "eval",
+  "run_at": "2026-11-23T14:57:27",
+  "label": "run 5: prompt rule that document text is never an instruction (upload extra, D26)",
+  "git_commit": "ad5c15e+uncommitted",
+  "today": "2026-11-22",
+  "model": "gemini-3.1-flash-lite",
+  "embedding_model": "BAAI/bge-small-en-v1.5",
+  "questions_asked": 40,
+  "model_requests": 54,
+  "retries": [
+    {
+      "id": "lookup-01",
+      "attempt": 1,
+      "kind": "http_503"
+    },
+    {
+      "id": "lookup-08",
+      "attempt": 1,
+      "kind": "http_503"
+    },
+    {
+      "id": "version-03",
+      "attempt": 1,
+      "kind": "http_503"
+    },
+    {
+      "id": "date-03",
+      "attempt": 1,
+      "kind": "http_503"
+    },
+    {
+      "id": "refuse-01",
+      "attempt": 1,
+      "kind": "http_503"
+    },
+    {
+      "id": "refuse-02",
+      "attempt": 1,
+      "kind": "http_503"
+    },
+    {
+      "id": "refuse-03",
+      "attempt": 1,
+      "kind": "timeout"
+    }
+  ],
+  "per_question": [
+    {
+      "id": "lookup-01",
+      "category": "lookup",
+      "question": "How many VPN sessions can I have open at the same time?",
+      "status": "answer",
+      "answer": "You may hold a maximum of 2 concurrent VPN sessions at one time.",
+      "citations": [
+        {
+          "key": "P1",
+          "doc_id": "it-vpn-guide",
+          "heading": null,
+          "quote": "You may hold at most 2 concurrent VPN sessions; a further device will be refused.",
+          "verified": true,
+          "problem": null
+        }
+      ],
+      "warnings": [],
+      "documents_read": [
+        "it-vpn-guide",
+        "hr-remote-work-policy",
+        "eng-oncall-runbook",
+        "it-password-policy",
+        "ref-onboarding-checklist"
+      ],
+      "passages_read": 11,
+      "prompt_tokens": 1675,
+      "completion_tokens": 88,
+      "seconds": 1.91,
+      "model_calls": 1,
+      "searched_again_with": null,
+      "first_status": null,
+      "measures": {
+        "retrieval": true,
+        "facts": true,
+        "citation": true,
+        "behaviour": true
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "id": "lookup-02",
+      "category": "lookup",
+      "question": "What is the minimum length for a work password?",
+      "status": "answer",
+      "answer": "Your work password must be at least 16 characters long.",
+      "citations": [
+        {
+          "key": "P1",
+          "doc_id": "it-password-policy",
+          "heading": null,
+          "quote": "Passwords must be at least 16 characters long.",
+          "verified": true,
+          "problem": null
+        }
+      ],
+      "warnings": [],
+      "documents_read": [
+        "it-password-policy",
+        "hr-remote-work-policy",
+        "hr-probation-policy",
+        "it-incident-reporting",
+        "ref-faq"
+      ],
+      "passages_read": 8,
+      "prompt_tokens": 1300,
+      "completion_tokens": 79,
+      "seconds": 1.44,
+      "model_calls": 1,
+      "searched_again_with": null,
+      "first_status": null,
+      "measures": {
+        "retrieval": true,
+        "facts": true,
+        "citation": true,
+        "behaviour": true
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "id": "lookup-03",
+      "category": "lookup",
+      "question": "What is the recovery time objective for the payments service?",
+      "status": "answer",
+      "answer": "The recovery time objective (RTO) for the payments service is 4 hours.",
+      "citations": [
+        {
+          "key": "P1",
+          "doc_id": "eng-disaster-recovery",
+          "heading": "1. Objectives",
+          "quote": "Payments service | 4 hours | 5 minutes",
+          "verified": true,
+          "problem": null
+        }
+      ],
+      "warnings": [],
+      "documents_read": [
+        "eng-disaster-recovery",
+        "ref-glossary",
+        "support-escalation",
+        "eng-oncall-runbook",
+        "fin-expense-policy"
+      ],
+      "passages_read": 18,
+      "prompt_tokens": 2227,
+      "completion_tokens": 83,
+      "seconds": 2.62,
+      "model_calls": 1,
+      "searched_again_with": null,
+      "first_status": null,
+      "measures": {
+        "retrieval": true,
+        "facts": true,
+        "citation": true,
+        "behaviour": true
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "id": "lookup-04",
+      "category": "lookup",
+      "question": "How many quotes do I need for a purchase above $40,000?",
+      "status": "answer",
+      "answer": "For any purchase exceeding $40,000, you are required to provide three quotes.",
+      "citations": [
+        {
+          "key": "P1",
+          "doc_id": "fin-procurement-policy",
+          "heading": null,
+          "quote": "Three quotes are needed above $40,000.",
+          "verified": true,
+          "problem": null
+        }
+      ],
+      "warnings": [],
+      "documents_read": [
+        "fin-procurement-policy",
+        "fin-expense-policy",
+        "fin-approval-matrix",
+        "hr-remote-work-policy",
+        "ref-faq"
+      ],
+      "passages_read": 13,
+      "prompt_tokens": 1627,
+      "completion_tokens": 88,
+      "seconds": 1.94,
+      "model_calls": 1,
+      "searched_again_with": null,
+      "first_status": null,
+      "measures": {
+        "retrieval": true,
+        "facts": true,
+        "citation": true,
+        "behaviour": true
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "id": "lookup-05",
+      "category": "lookup",
+      "question": "Where should secrets like API keys be stored?",
+      "status": "answer",
+      "answer": "Secrets must be stored in the secrets manager. They should never be placed in code or chat.",
+      "citations": [
+        {
+          "key": "P1",
+          "doc_id": "sec-security-policy",
+          "heading": null,
+          "quote": "Secrets live in the secrets manager, never in code or chat.",
+          "verified": true,
+          "problem": null
+        }
+      ],
+      "warnings": [],
+      "documents_read": [
+        "sec-security-policy",
+        "eng-logging-standards",
+        "eng-api-style-guide",
+        "ref-faq",
+        "eng-code-review"
+      ],
+      "passages_read": 5,
+      "prompt_tokens": 1136,
+      "completion_tokens": 87,
+      "seconds": 2.09,
+      "model_calls": 1,
+      "searched_again_with": null,
+      "first_status": null,
+      "measures": {
+        "retrieval": true,
+        "facts": true,
+        "citation": true,
+        "behaviour": true
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "id": "lookup-06",
+      "category": "lookup",
+      "question": "What is the maximum hotel room rate per night in a tier 1 city?",
+      "status": "answer",
+      "answer": "The maximum hotel room rate per night in a tier 1 city is $275, excluding taxes.",
+      "citations": [
+        {
+          "key": "P5",
+          "doc_id": "hr-travel-policy",
+          "heading": "4. Limits > 4.2 Hotels and daily spending limits",
+          "quote": "Hotel room rates, excluding taxes, are capped per night by city tier: | City tier | Maximum room rate per night | | --- | --- | | Tier 1 | $275 |",
+          "verified": true,
+          "problem": null
+        }
+      ],
+      "warnings": [],
+      "documents_read": [
+        "hr-travel-policy",
+        "hr-travel-booking-guide",
+        "fin-expense-policy",
+        "hr-leave-policy-v2",
+        "hr-training-policy"
+      ],
+      "passages_read": 23,
+      "prompt_tokens": 2343,
+      "completion_tokens": 118,
+      "seconds": 1.45,
+      "model_calls": 1,
+      "searched_again_with": null,
+      "first_status": null,
+      "measures": {
+        "retrieval": true,
+        "facts": true,
+        "citation": true,
+        "behaviour": true
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "id": "lookup-07",
+      "category": "lookup",
+      "question": "How long are application logs retained?",
+      "status": "answer",
+      "answer": "Application logs are retained for 365 days before they are deleted.",
+      "citations": [
+        {
+          "key": "P1",
+          "doc_id": "it-data-retention",
+          "heading": null,
+          "quote": "Application logs are retained for 365 days and then deleted.",
+          "verified": true,
+          "problem": null
+        }
+      ],
+      "warnings": [],
+      "documents_read": [
+        "it-data-retention",
+        "eng-logging-standards",
+        "it-password-policy",
+        "notes-people-2026-06",
+        "ref-faq"
+      ],
+      "passages_read": 5,
+      "prompt_tokens": 1141,
+      "completion_tokens": 84,
+      "seconds": 2.51,
+      "model_calls": 1,
+      "searched_again_with": null,
+      "first_status": null,
+      "measures": {
+        "retrieval": true,
+        "facts": true,
+        "citation": true,
+        "behaviour": true
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "id": "lookup-08",
+      "category": "lookup",
+      "question": "How long is the introductory period for new hires?",
+      "status": "answer",
+      "answer": "New hires serve an introductory period of 6 months from their start date.",
+      "citations": [
+        {
+          "key": "P1",
+          "doc_id": "hr-probation-policy",
+          "heading": null,
+          "quote": "New hires serve an introductory period, also called probation, of 6 months from their start date.",
+          "verified": true,
+          "problem": null
+        }
+      ],
+      "warnings": [],
+      "documents_read": [
+        "hr-probation-policy",
+        "ref-onboarding-checklist",
+        "hr-remote-work-policy",
+        "hr-notice-and-exit",
+        "hr-leave-policy-v2"
+      ],
+      "passages_read": 14,
+      "prompt_tokens": 1680,
+      "completion_tokens": 90,
+      "seconds": 1.98,
+      "model_calls": 1,
+      "searched_again_with": null,
+      "first_status": null,
+      "measures": {
+        "retrieval": true,
+        "facts": true,
+        "citation": true,
+        "behaviour": true
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "id": "lookup-09",
+      "category": "lookup",
+      "question": "What is the daily per-diem for an L2 employee travelling to New York?",
+      "status": "answer",
+      "answer": "The daily per-diem for an L2 employee traveling to New York is $80.",
+      "citations": [
+        {
+          "key": "P9",
+          "doc_id": "fin-per-diem-table",
+          "heading": null,
+          "quote": "grade: L2, city_tier: 1, example_cities: New York; San Francisco; Boston, per_diem_usd: 80",
+          "verified": true,
+          "problem": null
+        }
+      ],
+      "warnings": [],
+      "documents_read": [
+        "hr-travel-policy",
+        "fin-per-diem-table",
+        "fin-expense-policy",
+        "fin-reimbursement-sla",
+        "ref-handbook-index"
+      ],
+      "passages_read": 18,
+      "prompt_tokens": 2397,
+      "completion_tokens": 110,
+      "seconds": 1.47,
+      "model_calls": 1,
+      "searched_again_with": null,
+      "first_status": null,
+      "measures": {
+        "retrieval": true,
+        "facts": true,
+        "citation": true,
+        "behaviour": true
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "id": "lookup-10",
+      "category": "lookup",
+      "question": "Who is the Security Lead?",
+      "status": "answer",
+      "answer": "The Security Lead is Tyler Rodriguez.",
+      "citations": [
+        {
+          "key": "P1",
+          "doc_id": "org-chart",
+          "heading": null,
+          "quote": "name: Tyler Rodriguez, role: Security Lead, team: Security, location: Austin",
+          "verified": true,
+          "problem": null
+        }
+      ],
+      "warnings": [],
+      "documents_read": [
+        "org-chart",
+        "sec-security-policy",
+        "it-incident-reporting",
+        "ref-onboarding-checklist",
+        "support-escalation"
+      ],
+      "passages_read": 7,
+      "prompt_tokens": 1202,
+      "completion_tokens": 80,
+      "seconds": 1.59,
+      "model_calls": 1,
+      "searched_again_with": null,
+      "first_status": null,
+      "measures": {
+        "retrieval": true,
+        "facts": true,
+        "citation": true,
+        "behaviour": true
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "id": "lookup-11",
+      "category": "lookup",
+      "question": "How quickly must a SEV2 incident be acknowledged?",
+      "status": "answer",
+      "answer": "A SEV2 incident must be acknowledged within 45 minutes.",
+      "citations": [
+        {
+          "key": "P5",
+          "doc_id": "eng-sev-definitions",
+          "heading": null,
+          "quote": "SEV2  Major degradation or a single large customer down. Acknowledge within 45 minutes.",
+          "verified": true,
+          "problem": null
+        }
+      ],
+      "warnings": [],
+      "documents_read": [
+        "eng-oncall-runbook",
+        "eng-sev-definitions",
+        "ref-glossary",
+        "support-escalation",
+        "it-incident-reporting"
+      ],
+      "passages_read": 10,
+      "prompt_tokens": 1726,
+      "completion_tokens": 91,
+      "seconds": 2.98,
+      "model_calls": 1,
+      "searched_again_with": null,
+      "first_status": null,
+      "measures": {
+        "retrieval": true,
+        "facts": true,
+        "citation": true,
+        "behaviour": true
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "id": "lookup-12",
+      "category": "lookup",
+      "question": "Who is allowed to publish updates to the status page?",
+      "status": "answer",
+      "answer": "Only the Support lead and the incident commander are authorized to publish updates to the status page.",
+      "citations": [
+        {
+          "key": "P2",
+          "doc_id": "support-escalation",
+          "heading": "Status page",
+          "quote": "Only the Support lead and the incident commander may publish status page updates.",
+          "verified": true,
+          "problem": null
+        }
+      ],
+      "warnings": [],
+      "documents_read": [
+        "support-escalation",
+        "eng-oncall-runbook",
+        "eng-disaster-recovery",
+        "eng-api-style-guide",
+        "ref-faq"
+      ],
+      "passages_read": 13,
+      "prompt_tokens": 1838,
+      "completion_tokens": 87,
+      "seconds": 1.52,
+      "model_calls": 1,
+      "searched_again_with": null,
+      "first_status": null,
+      "measures": {
+        "retrieval": true,
+        "facts": true,
+        "citation": true,
+        "behaviour": true
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "id": "version-01",
+      "category": "version",
+      "question": "How many days of annual leave do full-time employees get per year?",
+      "status": "answer",
+      "answer": "Full-time employees are entitled to 16 days of annual leave per calendar year.",
+      "citations": [
+        {
+          "key": "P3",
+          "doc_id": "hr-leave-policy-v2",
+          "heading": "2. Annual leave",
+          "quote": "Full-time employees accrue 16 days of annual leave per calendar year",
+          "verified": true,
+          "problem": null
+        }
+      ],
+      "warnings": [],
+      "documents_read": [
+        "hr-leave-policy-v2",
+        "hr-working-hours-holidays",
+        "hr-referral-policy",
+        "ref-benefits-overview",
+        "hr-remote-work-policy"
+      ],
+      "passages_read": 14,
+      "prompt_tokens": 1641,
+      "completion_tokens": 89,
+      "seconds": 1.31,
+      "model_calls": 1,
+      "searched_again_with": null,
+      "first_status": null,
+      "measures": {
+        "retrieval": true,
+        "facts": true,
+        "citation": true,
+        "behaviour": true
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "id": "version-02",
+      "category": "version",
+      "question": "How long before a scheduled release does the deploy freeze start?",
+      "status": "answer",
+      "answer": "A deploy freeze starts 72 hours before every scheduled release.",
+      "citations": [
+        {
+          "key": "P1",
+          "doc_id": "eng-deploy-runbook",
+          "heading": "1. When to deploy",
+          "quote": "A **deploy freeze starts 72 hours before every scheduled release** and during declared incidents.",
+          "verified": true,
+          "problem": null
+        }
+      ],
+      "warnings": [],
+      "documents_read": [
+        "eng-deploy-runbook",
+        "eng-release-calendar",
+        "notes-platform-2026-03",
+        "notes-allhands-2026-09",
+        "team-product"
+      ],
+      "passages_read": 9,
+      "prompt_tokens": 1490,
+      "completion_tokens": 87,
+      "seconds": 1.62,
+      "model_calls": 1,
+      "searched_again_with": null,
+      "first_status": null,
+      "measures": {
+        "retrieval": true,
+        "facts": true,
+        "citation": true,
+        "behaviour": true
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "id": "version-03",
+      "category": "version",
+      "question": "How many approving reviews does a change need before it can be deployed to production?",
+      "status": "answer",
+      "answer": "A change to a production repository requires 2 approving reviews from someone other than the author before it can be merged and deployed.",
+      "citations": [
+        {
+          "key": "P2",
+          "doc_id": "eng-deploy-runbook",
+          "heading": "2. Pre-flight",
+          "quote": "The change has 2 approving review(s) and a green CI pipeline.",
+          "verified": true,
+          "problem": null
+        },
+        {
+          "key": "P6",
+          "doc_id": "eng-code-review",
+          "heading": null,
+          "quote": "Every change to a production repository needs 2 approving review(s) from someone other than the author before merge, plus a green CI pipeline.",
+          "verified": true,
+          "problem": null
+        }
+      ],
+      "warnings": [],
+      "documents_read": [
+        "eng-deploy-runbook",
+        "eng-code-review",
+        "hr-performance-review",
+        "fin-vendor-policy",
+        "eng-db-migration-runbook"
+      ],
+      "passages_read": 9,
+      "prompt_tokens": 1375,
+      "completion_tokens": 146,
+      "seconds": 1.19,
+      "model_calls": 1,
+      "searched_again_with": null,
+      "first_status": null,
+      "measures": {
+        "retrieval": true,
+        "facts": true,
+        "citation": true,
+        "behaviour": true
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "id": "version-04",
+      "category": "version",
+      "question": "For how long after a deploy can I use the one-click rollback?",
+      "status": "answer",
+      "answer": "You can use the one-click rollback in the deploy console for 45 minutes after the full rollout is complete.",
+      "citations": [
+        {
+          "key": "P4",
+          "doc_id": "eng-deploy-runbook",
+          "heading": "4. Rollback window",
+          "quote": "A deploy can be rolled back with a single click in the deploy console for 45 minutes after full rollout completes.",
+          "verified": true,
+          "problem": null
+        }
+      ],
+      "warnings": [],
+      "documents_read": [
+        "eng-deploy-runbook",
+        "eng-rollback-procedure",
+        "eng-oncall-runbook",
+        "notes-platform-2026-03",
+        "notes-allhands-2026-09"
+      ],
+      "passages_read": 11,
+      "prompt_tokens": 1697,
+      "completion_tokens": 103,
+      "seconds": 1.11,
+      "model_calls": 1,
+      "searched_again_with": null,
+      "first_status": null,
+      "measures": {
+        "retrieval": true,
+        "facts": true,
+        "citation": true,
+        "behaviour": true
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "id": "version-05",
+      "category": "version",
+      "question": "Do production deploys go straight to full rollout?",
+      "status": "answer",
+      "answer": "No, production deploys do not go straight to full rollout. They must first go through a canary stage, which involves 5 percent of traffic for ten minutes.",
+      "citations": [
+        {
+          "key": "P3",
+          "doc_id": "eng-deploy-runbook",
+          "heading": "3. Rollout",
+          "quote": "Deploys go through the canary stage (5 percent of traffic) for ten minutes, then to full rollout.",
+          "verified": true,
+          "problem": null
+        }
+      ],
+      "warnings": [],
+      "documents_read": [
+        "eng-deploy-runbook",
+        "eng-db-migration-runbook",
+        "team-platform",
+        "eng-rollback-procedure",
+        "eng-oncall-runbook"
+      ],
+      "passages_read": 12,
+      "prompt_tokens": 1716,
+      "completion_tokens": 111,
+      "seconds": 1.22,
+      "model_calls": 1,
+      "searched_again_with": null,
+      "first_status": null,
+      "measures": {
+        "retrieval": true,
+        "facts": true,
+        "citation": true,
+        "behaviour": true
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "id": "version-06",
+      "category": "version",
+      "question": "Is Leave Policy v1 still in effect?",
+      "status": "answer",
+      "answer": "No, Leave Policy v1 is not in effect. It was superseded by Leave Policy v2, which has been in effect since April 1, 2025.",
+      "citations": [
+        {
+          "key": "P1",
+          "doc_id": "hr-leave-policy-v2",
+          "heading": null,
+          "quote": "This version supersedes Leave Policy v1 with effect from 2025-04-01.",
+          "verified": true,
+          "problem": null
+        },
+        {
+          "key": "P9",
+          "doc_id": "ref-handbook-index",
+          "heading": "Sections",
+          "quote": "Leave Policy v2 (current) and Leave Policy v1 (superseded)",
+          "verified": true,
+          "problem": null
+        }
+      ],
+      "warnings": [],
+      "documents_read": [
+        "hr-leave-policy-v2",
+        "ref-handbook-index",
+        "notes-people-2026-06",
+        "hr-parental-leave-policy-2027",
+        "hr-parental-leave-policy"
+      ],
+      "passages_read": 15,
+      "prompt_tokens": 1690,
+      "completion_tokens": 151,
+      "seconds": 2.53,
+      "model_calls": 1,
+      "searched_again_with": null,
+      "first_status": null,
+      "measures": {
+        "retrieval": true,
+        "facts": true,
+        "citation": true,
+        "behaviour": true
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "id": "date-01",
+      "category": "date",
+      "question": "I'm the secondary caregiver and our baby is due in February 2027. How much paid leave will I get?",
+      "status": "answer",
+      "answer": "As your baby is due in February 2027, you are eligible for 26 weeks of fully paid secondary caregiver leave. This increase from the current 12-week entitlement applies to births on or after January 1, 2027.",
+      "citations": [
+        {
+          "key": "P1",
+          "doc_id": "hr-parental-leave-policy-2027",
+          "heading": null,
+          "quote": "secondary caregiver leave increases from 12 weeks to 26 weeks fully paid for births and adoptions on or after 2027-01-01.",
+          "verified": true,
+          "problem": null
+        }
+      ],
+      "warnings": [
+        "Part of this answer comes from a document that is not in force yet."
+      ],
+      "documents_read": [
+        "hr-parental-leave-policy-2027",
+        "hr-parental-leave-policy",
+        "notes-people-2026-06",
+        "hr-leave-policy-v2",
+        "ref-faq"
+      ],
+      "passages_read": 14,
+      "prompt_tokens": 1725,
+      "completion_tokens": 146,
+      "seconds": 2.39,
+      "model_calls": 1,
+      "searched_again_with": null,
+      "first_status": null,
+      "measures": {
+        "retrieval": true,
+        "facts": true,
+        "citation": true,
+        "behaviour": true
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "id": "date-02",
+      "category": "date",
+      "question": "My partner gave birth last month. As the secondary caregiver, how much paid leave do I get?",
+      "status": "answer",
+      "answer": "As a secondary caregiver, you are entitled to 12 weeks of fully paid leave, which must be taken within six months of the birth.",
+      "citations": [
+        {
+          "key": "P2",
+          "doc_id": "hr-parental-leave-policy",
+          "heading": "Secondary caregiver leave",
+          "quote": "Fathers and secondary caregivers receive 12 weeks of fully paid leave, to be taken within six months of the birth or adoption.",
+          "verified": true,
+          "problem": null
+        }
+      ],
+      "warnings": [],
+      "documents_read": [
+        "hr-parental-leave-policy",
+        "hr-parental-leave-policy-2027",
+        "ref-faq",
+        "notes-people-2026-06",
+        "hr-leave-policy-v2"
+      ],
+      "passages_read": 14,
+      "prompt_tokens": 1718,
+      "completion_tokens": 111,
+      "seconds": 2.11,
+      "model_calls": 1,
+      "searched_again_with": null,
+      "first_status": null,
+      "measures": {
+        "retrieval": true,
+        "facts": true,
+        "citation": true,
+        "behaviour": true
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "id": "date-03",
+      "category": "date",
+      "question": "When does the deploy freeze for the next release start?",
+      "status": "answer",
+      "answer": "The next release is 2026.23, scheduled for December 3, 2026. The deploy freeze for this release begins 72 hours before that date, which is November 30, 2026.",
+      "citations": [
+        {
+          "key": "P12",
+          "doc_id": "eng-release-calendar",
+          "heading": null,
+          "quote": "release: 2026.23, date: 2026-12-03, freeze_starts: 72 hours before, owner: Maya Park",
+          "verified": true,
+          "problem": null
+        },
+        {
+          "key": "P1",
+          "doc_id": "eng-deploy-runbook",
+          "heading": "1. When to deploy",
+          "quote": "A **deploy freeze starts 72 hours before every scheduled release**",
+          "verified": true,
+          "problem": null
+        }
+      ],
+      "warnings": [],
+      "documents_read": [
+        "eng-deploy-runbook",
+        "eng-oncall-runbook",
+        "notes-allhands-2026-09",
+        "notes-platform-2026-03",
+        "eng-release-calendar"
+      ],
+      "passages_read": 12,
+      "prompt_tokens": 1907,
+      "completion_tokens": 186,
+      "seconds": 1.69,
+      "model_calls": 1,
+      "searched_again_with": null,
+      "first_status": null,
+      "measures": {
+        "retrieval": true,
+        "facts": true,
+        "citation": true,
+        "behaviour": true
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "id": "multi-01",
+      "category": "multi",
+      "question": "I booked a $3,000 business trip through VoyageHub. Do I need a VP to approve the expense?",
+      "status": "answer",
+      "answer": "No, you do not need a Vice President to approve the expense. Travel booked through VoyageHub is pre-approved at the time of booking and only requires manager sign-off at the time of the claim.",
+      "citations": [
+        {
+          "key": "P5",
+          "doc_id": "fin-expense-policy",
+          "heading": "4. Approval thresholds",
+          "quote": "Claims above $2,500 require approval from a Vice President in addition to your manager, except travel that was booked through VoyageHub, which is pre-approved at booking time and needs only manager sign-off at claim time.",
+          "verified": true,
+          "problem": null
+        }
+      ],
+      "warnings": [],
+      "documents_read": [
+        "hr-travel-booking-guide",
+        "fin-expense-policy",
+        "fin-reimbursement-sla",
+        "hr-travel-policy",
+        "ref-faq"
+      ],
+      "passages_read": 17,
+      "prompt_tokens": 2000,
+      "completion_tokens": 145,
+      "seconds": 1.16,
+      "model_calls": 1,
+      "searched_again_with": null,
+      "first_status": null,
+      "measures": {
+        "retrieval": true,
+        "facts": true,
+        "citation": true,
+        "behaviour": true
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "id": "multi-02",
+      "category": "multi",
+      "question": "I'm an L3 employee travelling to Chicago. What is my daily per-diem and my hotel limit per night?",
+      "status": "answer",
+      "answer": "For an L3 employee traveling to Chicago (a Tier 2 city), the daily per-diem is $75 and the maximum hotel room rate is $200 per night.",
+      "citations": [
+        {
+          "key": "P3",
+          "doc_id": "hr-travel-policy",
+          "heading": "3. City tiers",
+          "quote": "Tier 2: Chicago, Seattle, Los Angeles, Washington DC",
+          "verified": true,
+          "problem": null
+        },
+        {
+          "key": "P5",
+          "doc_id": "hr-travel-policy",
+          "heading": "4. Limits > 4.2 Hotels and daily spending limits",
+          "quote": "| Tier 2 | $200 |",
+          "verified": true,
+          "problem": null
+        },
+        {
+          "key": "P16",
+          "doc_id": "fin-per-diem-table",
+          "heading": null,
+          "quote": "grade: L3, city_tier: 2, example_cities: Chicago; Seattle; Los Angeles; Washington DC, per_diem_usd: 75",
+          "verified": true,
+          "problem": null
+        }
+      ],
+      "warnings": [],
+      "documents_read": [
+        "hr-travel-policy",
+        "fin-expense-policy",
+        "hr-travel-booking-guide",
+        "fin-per-diem-table",
+        "hr-working-hours-holidays"
+      ],
+      "passages_read": 17,
+      "prompt_tokens": 2454,
+      "completion_tokens": 198,
+      "seconds": 1.3,
+      "model_calls": 1,
+      "searched_again_with": null,
+      "first_status": null,
+      "measures": {
+        "retrieval": true,
+        "facts": true,
+        "citation": true,
+        "behaviour": true
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "id": "multi-03",
+      "category": "multi",
+      "question": "I'm an L1 employee going to Denver for work. What per-diem do I get?",
+      "status": "answer",
+      "answer": "As an L1 employee traveling to Denver, which is a Tier 3 city, your daily per-diem allowance is $40.",
+      "citations": [
+        {
+          "key": "P3",
+          "doc_id": "hr-travel-policy",
+          "heading": "3. City tiers",
+          "quote": "Tier 3: Omaha, Tulsa, Boise, Albuquerque, Des Moines and any city not listed above",
+          "verified": true,
+          "problem": null
+        },
+        {
+          "key": "P9",
+          "doc_id": "fin-per-diem-table",
+          "heading": null,
+          "quote": "grade: L1, city_tier: 3, example_cities: Omaha; Tulsa; Boise; Albuquerque; Des Moines, per_diem_usd: 40",
+          "verified": true,
+          "problem": null
+        }
+      ],
+      "warnings": [],
+      "documents_read": [
+        "hr-travel-policy",
+        "fin-per-diem-table",
+        "ref-faq",
+        "fin-expense-policy",
+        "hr-training-policy"
+      ],
+      "passages_read": 17,
+      "prompt_tokens": 2429,
+      "completion_tokens": 164,
+      "seconds": 6.12,
+      "model_calls": 1,
+      "searched_again_with": null,
+      "first_status": null,
+      "measures": {
+        "retrieval": true,
+        "facts": true,
+        "citation": true,
+        "behaviour": true
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "id": "multi-04",
+      "category": "multi",
+      "question": "How much is the on-call stipend?",
+      "status": "answer",
+      "answer": "The on-call stipend is $500 per week for the primary role and $250 per week for the secondary role.",
+      "citations": [
+        {
+          "key": "P2",
+          "doc_id": "eng-oncall-runbook",
+          "heading": "2. Rotations",
+          "quote": "An on-call stipend of $500 per week is paid for the primary role and half that for the secondary role.",
+          "verified": true,
+          "problem": null
+        }
+      ],
+      "warnings": [],
+      "documents_read": [
+        "eng-oncall-runbook",
+        "ref-benefits-overview",
+        "notes-allhands-2026-09",
+        "ref-faq",
+        "hr-travel-policy"
+      ],
+      "passages_read": 14,
+      "prompt_tokens": 1952,
+      "completion_tokens": 109,
+      "seconds": 1.86,
+      "model_calls": 1,
+      "searched_again_with": null,
+      "first_status": null,
+      "measures": {
+        "retrieval": true,
+        "facts": true,
+        "citation": true,
+        "behaviour": true
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "id": "multi-05",
+      "category": "multi",
+      "question": "I'm still in my introductory period. Can I already claim the $1,000 home office allowance?",
+      "status": "answer",
+      "answer": "No, you cannot claim the home office allowance during your introductory period. This benefit becomes available only after your employment is confirmed following the introductory period.",
+      "citations": [
+        {
+          "key": "P6",
+          "doc_id": "hr-probation-policy",
+          "heading": null,
+          "quote": "Remote work and the home office allowance become available on confirmation.",
+          "verified": true,
+          "problem": null
+        },
+        {
+          "key": "P7",
+          "doc_id": "ref-benefits-overview",
+          "heading": null,
+          "quote": "Home office allowance of $1,000 after the introductory period.",
+          "verified": true,
+          "problem": null
+        }
+      ],
+      "warnings": [],
+      "documents_read": [
+        "hr-remote-work-policy",
+        "hr-wfh-equipment",
+        "hr-probation-policy",
+        "ref-benefits-overview",
+        "fin-expense-policy"
+      ],
+      "passages_read": 13,
+      "prompt_tokens": 1597,
+      "completion_tokens": 132,
+      "seconds": 1.78,
+      "model_calls": 1,
+      "searched_again_with": null,
+      "first_status": null,
+      "measures": {
+        "retrieval": true,
+        "facts": true,
+        "citation": true,
+        "behaviour": true
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "id": "multi-06",
+      "category": "multi",
+      "question": "An incident started 20 minutes after my deploy finished. What should I do first, and can I still use the one-click rollback?",
+      "status": "answer",
+      "answer": "You should prioritize restoring service by rolling back the deploy, which is the default first action when an incident occurs shortly after a deployment. Since your deploy finished 20 minutes ago, you are within the 45-minute window and can use the one-click rollback in the deploy console.",
+      "citations": [
+        {
+          "key": "P9",
+          "doc_id": "eng-oncall-runbook",
+          "heading": "9. Mitigation first",
+          "quote": "Rolling back the last deploy is the default first action when an incident starts shortly after a deploy",
+          "verified": true,
+          "problem": null
+        },
+        {
+          "key": "P4",
+          "doc_id": "eng-deploy-runbook",
+          "heading": "4. Rollback window",
+          "quote": "A deploy can be rolled back with a single click in the deploy console for 45 minutes after full rollout completes.",
+          "verified": true,
+          "problem": null
+        }
+      ],
+      "warnings": [],
+      "documents_read": [
+        "eng-deploy-runbook",
+        "eng-oncall-runbook",
+        "eng-rollback-procedure",
+        "notes-platform-2026-03",
+        "it-incident-reporting"
+      ],
+      "passages_read": 12,
+      "prompt_tokens": 1778,
+      "completion_tokens": 178,
+      "seconds": 2.34,
+      "model_calls": 1,
+      "searched_again_with": null,
+      "first_status": null,
+      "measures": {
+        "retrieval": true,
+        "facts": true,
+        "citation": true,
+        "behaviour": true
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "id": "words-01",
+      "category": "words",
+      "question": "how much PTO do i get",
+      "status": "answer",
+      "answer": "Full-time employees accrue 16 days of annual leave per calendar year, while part-time employees accrue this on a pro rata basis.",
+      "citations": [
+        {
+          "key": "P3",
+          "doc_id": "hr-leave-policy-v2",
+          "heading": "2. Annual leave",
+          "quote": "Full-time employees accrue 16 days of annual leave per calendar year, credited each pay period in equal parts. Part-time employees accrue pro rata.",
+          "verified": true,
+          "problem": null
+        }
+      ],
+      "warnings": [],
+      "documents_read": [
+        "hr-leave-policy-v2",
+        "fin-expense-policy",
+        "hr-parental-leave-policy",
+        "fin-reimbursement-sla",
+        "hr-notice-and-exit"
+      ],
+      "passages_read": 19,
+      "prompt_tokens": 3209,
+      "completion_tokens": 225,
+      "seconds": 2.12,
+      "model_calls": 2,
+      "searched_again_with": "paid time off entitlement",
+      "first_status": "refuse",
+      "measures": {
+        "retrieval": true,
+        "facts": true,
+        "citation": true,
+        "behaviour": true
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "id": "words-02",
+      "category": "words",
+      "question": "can i wfh 3 days a week?",
+      "status": "answer",
+      "answer": "Employees are permitted to work remotely up to 2 days per week by default. If your team operates physical hardware labs, you must consult your manager regarding in-office requirements.",
+      "citations": [
+        {
+          "key": "P1",
+          "doc_id": "hr-remote-work-policy",
+          "heading": "Eligibility",
+          "quote": "Employees past the introductory period may work remotely up to **2 days per week** by default. Teams that run physical hardware labs set their own in-office days; check with your manager.",
+          "verified": true,
+          "problem": null
+        }
+      ],
+      "warnings": [],
+      "documents_read": [
+        "hr-remote-work-policy",
+        "hr-wfh-equipment",
+        "it-laptop-policy",
+        "eng-oncall-runbook",
+        "hr-leave-policy-v2"
+      ],
+      "passages_read": 21,
+      "prompt_tokens": 2185,
+      "completion_tokens": 128,
+      "seconds": 1.83,
+      "model_calls": 1,
+      "searched_again_with": null,
+      "first_status": null,
+      "measures": {
+        "retrieval": true,
+        "facts": true,
+        "citation": true,
+        "behaviour": true
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "id": "words-03",
+      "category": "words",
+      "question": "How long is probation here?",
+      "status": "answer",
+      "answer": "New hires serve an introductory period, or probation, of 6 months from their start date.",
+      "citations": [
+        {
+          "key": "P1",
+          "doc_id": "hr-probation-policy",
+          "heading": null,
+          "quote": "New hires serve an introductory period, also called probation, of 6 months from their start date.",
+          "verified": true,
+          "problem": null
+        }
+      ],
+      "warnings": [],
+      "documents_read": [
+        "hr-probation-policy",
+        "it-password-policy",
+        "ref-faq",
+        "eng-oncall-runbook",
+        "hr-remote-work-policy"
+      ],
+      "passages_read": 10,
+      "prompt_tokens": 1508,
+      "completion_tokens": 94,
+      "seconds": 2.47,
+      "model_calls": 1,
+      "searched_again_with": null,
+      "first_status": null,
+      "measures": {
+        "retrieval": true,
+        "facts": true,
+        "citation": true,
+        "behaviour": true
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "id": "words-04",
+      "category": "words",
+      "question": "What does RTO stand for in the disaster recovery runbook?",
+      "status": "answer",
+      "answer": "In the disaster recovery runbook, RTO stands for Recovery Time Objective, which is defined as the maximum acceptable time to restore a service after a disaster.",
+      "citations": [
+        {
+          "key": "P5",
+          "doc_id": "ref-glossary",
+          "heading": null,
+          "quote": "RTO: Recovery Time Objective. The maximum acceptable time to restore a service after a disaster.",
+          "verified": true,
+          "problem": null
+        }
+      ],
+      "warnings": [],
+      "documents_read": [
+        "eng-disaster-recovery",
+        "ref-glossary",
+        "ref-handbook-index",
+        "eng-oncall-runbook",
+        "it-data-retention"
+      ],
+      "passages_read": 11,
+      "prompt_tokens": 1690,
+      "completion_tokens": 106,
+      "seconds": 1.81,
+      "model_calls": 1,
+      "searched_again_with": null,
+      "first_status": null,
+      "measures": {
+        "retrieval": true,
+        "facts": true,
+        "citation": true,
+        "behaviour": true
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "id": "words-05",
+      "category": "words",
+      "question": "my laptop got stolen, what do i do",
+      "status": "answer",
+      "answer": "You must report the theft to IT and the Security team within 24 hours so the device can be wiped remotely. Additionally, you are required to file a police report, as a copy is necessary for the insurance claim.",
+      "citations": [
+        {
+          "key": "P3",
+          "doc_id": "it-laptop-policy",
+          "heading": "3. Loss or theft",
+          "quote": "Report a lost or stolen laptop to IT and the Security team within 24 hours so that it can be wiped remotely. File a police report for theft; a copy is needed for the insurance claim.",
+          "verified": true,
+          "problem": null
+        }
+      ],
+      "warnings": [],
+      "documents_read": [
+        "it-laptop-policy",
+        "it-incident-reporting",
+        "ref-faq",
+        "ref-onboarding-checklist",
+        "eng-oncall-runbook"
+      ],
+      "passages_read": 12,
+      "prompt_tokens": 1751,
+      "completion_tokens": 141,
+      "seconds": 1.05,
+      "model_calls": 1,
+      "searched_again_with": null,
+      "first_status": null,
+      "measures": {
+        "retrieval": true,
+        "facts": true,
+        "citation": true,
+        "behaviour": true
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "id": "refuse-01",
+      "category": "refuse",
+      "question": "What date is the Thanksgiving holiday this year?",
+      "status": "refuse",
+      "answer": "The handbook does not contain information regarding specific holiday dates, such as Thanksgiving. It only states that the company observes 11 paid holidays per year and refers employees to the Holiday Calendar CSV for the dated list.",
+      "citations": [
+        {
+          "key": "P1",
+          "doc_id": "hr-working-hours-holidays",
+          "heading": null,
+          "quote": "The company observes 11 paid holidays per year; the dated list is in the Holiday Calendar CSV.",
+          "verified": true,
+          "problem": null
+        }
+      ],
+      "warnings": [],
+      "documents_read": [
+        "hr-working-hours-holidays",
+        "hr-leave-policy-v2",
+        "ref-handbook-index",
+        "team-product",
+        "fin-expense-policy"
+      ],
+      "passages_read": 17,
+      "prompt_tokens": 3472,
+      "completion_tokens": 252,
+      "seconds": 3.88,
+      "model_calls": 2,
+      "searched_again_with": "What are the dates of the company observed holidays for the current calendar year?",
+      "first_status": "refuse",
+      "measures": {
+        "retrieval": null,
+        "facts": true,
+        "citation": null,
+        "behaviour": true
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "id": "refuse-02",
+      "category": "refuse",
+      "question": "Who is my VP?",
+      "status": "refuse",
+      "answer": "The handbook does not contain information regarding the specific identity of individual Vice Presidents. Please consult your department's organizational chart or your direct manager for this information.",
+      "citations": [],
+      "warnings": [],
+      "documents_read": [
+        "fin-approval-matrix",
+        "fin-expense-policy",
+        "ref-faq",
+        "eng-oncall-runbook",
+        "hr-code-of-conduct"
+      ],
+      "passages_read": 12,
+      "prompt_tokens": 3416,
+      "completion_tokens": 139,
+      "seconds": 2.66,
+      "model_calls": 2,
+      "searched_again_with": "Who is my Vice President",
+      "first_status": "refuse",
+      "measures": {
+        "retrieval": null,
+        "facts": null,
+        "citation": null,
+        "behaviour": true
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "id": "refuse-03",
+      "category": "refuse",
+      "question": "What is the deductible on the dental insurance?",
+      "status": "refuse",
+      "answer": "The provided handbook passages do not contain information regarding the deductible for dental insurance. The Benefits Overview mentions that the company pays 90 percent of the employee premium for medical, dental, and vision insurance, but it does not detail specific coverage terms or deductibles.",
+      "citations": [
+        {
+          "key": "P1",
+          "doc_id": "ref-benefits-overview",
+          "heading": null,
+          "quote": "Medical, dental and vision insurance for employees and dependents, with the company paying 90 percent of the employee premium.",
+          "verified": true,
+          "problem": null
+        }
+      ],
+      "warnings": [],
+      "documents_read": [
+        "ref-benefits-overview",
+        "hr-travel-policy",
+        "it-laptop-policy",
+        "fin-reimbursement-sla",
+        "fin-expense-policy"
+      ],
+      "passages_read": 21,
+      "prompt_tokens": 4325,
+      "completion_tokens": 223,
+      "seconds": 2.6,
+      "model_calls": 2,
+      "searched_again_with": "dental insurance deductible",
+      "first_status": "refuse",
+      "measures": {
+        "retrieval": null,
+        "facts": null,
+        "citation": null,
+        "behaviour": true
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "id": "refuse-04",
+      "category": "refuse",
+      "question": "What is the guest wifi password at the Denver office?",
+      "status": "refuse",
+      "answer": "The provided handbook passages do not contain information regarding guest wifi passwords or office network access credentials. The available documentation covers VPN usage, remote work policies, and system access request processes.",
+      "citations": [],
+      "warnings": [],
+      "documents_read": [
+        "it-vpn-guide",
+        "it-access-request",
+        "it-byod-policy",
+        "eng-fleet-console-guide",
+        "hr-remote-work-policy"
+      ],
+      "passages_read": 8,
+      "prompt_tokens": 2778,
+      "completion_tokens": 143,
+      "seconds": 3.39,
+      "model_calls": 2,
+      "searched_again_with": "guest wireless network access credentials",
+      "first_status": "refuse",
+      "measures": {
+        "retrieval": null,
+        "facts": null,
+        "citation": null,
+        "behaviour": true
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "id": "refuse-05",
+      "category": "refuse",
+      "question": "Who is the CEO of Northgate Robotics?",
+      "status": "refuse",
+      "answer": "The provided handbook passages do not contain information regarding the Chief Executive Officer of Northgate Robotics. The documents only list the Chief Technology Officer and the Head of People.",
+      "citations": [],
+      "warnings": [],
+      "documents_read": [
+        "team-robotics-firmware",
+        "hr-travel-policy",
+        "eng-oncall-runbook",
+        "office-locations",
+        "org-chart"
+      ],
+      "passages_read": 14,
+      "prompt_tokens": 4337,
+      "completion_tokens": 165,
+      "seconds": 5.63,
+      "model_calls": 2,
+      "searched_again_with": "Who is the Chief Executive Officer of Northgate Robotics",
+      "first_status": "refuse",
+      "measures": {
+        "retrieval": null,
+        "facts": null,
+        "citation": null,
+        "behaviour": true
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "id": "clarify-01",
+      "category": "clarify",
+      "question": "Who is Maya?",
+      "status": "clarify",
+      "answer": "There are three employees named Maya at Northgate Robotics. Please specify if you mean Maya Park (Head of Product), Maya Rivera (Engineering Manager, Data Team), or Maya Brooks (Engineering Manager, Platform Team).",
+      "citations": [
+        {
+          "key": "P3",
+          "doc_id": "org-chart",
+          "heading": null,
+          "quote": "name: Maya Rivera, role: Engineering Manager, team: Data Team, location: Denver",
+          "verified": true,
+          "problem": null
+        },
+        {
+          "key": "P3",
+          "doc_id": "org-chart",
+          "heading": null,
+          "quote": "name: Maya Brooks, role: Engineering Manager, team: Platform Team, location: Austin",
+          "verified": true,
+          "problem": null
+        },
+        {
+          "key": "P3",
+          "doc_id": "org-chart",
+          "heading": null,
+          "quote": "name: Maya Park, role: Head of Product, team: Product, location: Denver",
+          "verified": true,
+          "problem": null
+        }
+      ],
+      "warnings": [],
+      "documents_read": [
+        "eng-release-calendar",
+        "team-product",
+        "org-chart",
+        "notes-platform-2026-03",
+        "team-platform"
+      ],
+      "passages_read": 5,
+      "prompt_tokens": 1191,
+      "completion_tokens": 198,
+      "seconds": 2.94,
+      "model_calls": 1,
+      "searched_again_with": null,
+      "first_status": null,
+      "measures": {
+        "retrieval": true,
+        "facts": true,
+        "citation": true,
+        "behaviour": true
+      },
+      "passed": true,
+      "reasons": []
+    },
+    {
+      "id": "clarify-02",
+      "category": "clarify",
+      "question": "What does Tyler do?",
+      "status": "clarify",
+      "answer": "There are three employees named Tyler at Northgate Robotics. Please specify if you mean Tyler Anderson (Chief Technology Officer), Tyler Martinez (IT Lead), or Tyler Rodriguez (Security Lead).",
+      "citations": [
+        {
+          "key": "P1",
+          "doc_id": "org-chart",
+          "heading": null,
+          "quote": "name: Tyler Anderson, role: Chief Technology Officer, team: Leadership, location: Austin\nname: Tyler Martinez, role: IT Lead, team: IT Operations, location: Denver\nname: Tyler Rodriguez, role: Security Lead, team: Security, location: Austin",
+          "verified": false,
+          "problem": "quote not found in the passage"
+        }
+      ],
+      "warnings": [
+        "1 of the quotes couldn't be found in the passage they cite."
+      ],
+      "documents_read": [
+        "org-chart",
+        "notes-allhands-2026-09",
+        "eng-oncall-runbook",
+        "ref-faq",
+        "it-email-messaging"
+      ],
+      "passages_read": 7,
+      "prompt_tokens": 1525,
+      "completion_tokens": 151,
+      "seconds": 1.56,
+      "model_calls": 1,
+      "searched_again_with": null,
+      "first_status": null,
+      "measures": {
+        "retrieval": true,
+        "facts": true,
+        "citation": false,
+        "behaviour": true
+      },
+      "passed": false,
+      "reasons": [
+        "citation: no verified quote from ['org-chart']"
+      ]
+    },
+    {
+      "id": "clarify-03",
+      "category": "clarify",
+      "question": "How much parental leave do I get?",
+      "status": "clarify",
+      "answer": "The amount of parental leave you receive depends on your role as a parent. Please clarify if you are a birth parent, an adoptive/foster parent, or a secondary caregiver, as these categories have different entitlements.",
+      "citations": [
+        {
+          "key": "P1",
+          "doc_id": "hr-parental-leave-policy",
+          "heading": "Birth parent leave",
+          "quote": "Birth parents receive 16 weeks of fully paid leave",
+          "verified": true,
+          "problem": null
+        },
+        {
+          "key": "P2",
+          "doc_id": "hr-parental-leave-policy",
+          "heading": "Secondary caregiver leave",
+          "quote": "Fathers and secondary caregivers receive 12 weeks of fully paid leave",
+          "verified": true,
+          "problem": null
+        },
+        {
+          "key": "P3",
+          "doc_id": "hr-parental-leave-policy",
+          "heading": "Adoption and foster placement",
+          "quote": "Adoptive and foster parents receive the same entitlements as birth parents.",
+          "verified": true,
+          "problem": null
+        }
+      ],
+      "warnings": [],
+      "documents_read": [
+        "hr-parental-leave-policy",
+        "hr-parental-leave-policy-2027",
+        "ref-faq",
+        "hr-leave-policy-v2",
+        "notes-people-2026-06"
+      ],
+      "passages_read": 14,
+      "prompt_tokens": 1706,
+      "completion_tokens": 181,
+      "seconds": 1.58,
+      "model_calls": 1,
+      "searched_again_with": null,
+      "first_status": null,
+      "measures": {
+        "retrieval": true,
+        "facts": false,
+        "citation": true,
+        "behaviour": true
+      },
+      "passed": false,
+      "reasons": [
+        "facts: missing ['16 weeks', '12 weeks']"
+      ]
+    }
+  ],
+  "seconds_total": 391,
+  "summary": {
+    "passed": [
+      38,
+      40
+    ],
+    "measures": {
+      "retrieval": [
+        35,
+        35
+      ],
+      "facts": [
+        35,
+        36
+      ],
+      "citation": [
+        34,
+        35
+      ],
+      "behaviour": [
+        40,
+        40
+      ]
+    },
+    "categories": {
+      "clarify": [
+        1,
+        3
+      ],
+      "date": [
+        3,
+        3
+      ],
+      "lookup": [
+        12,
+        12
+      ],
+      "multi": [
+        6,
+        6
+      ],
+      "refuse": [
+        5,
+        5
+      ],
+      "version": [
+        6,
+        6
+      ],
+      "words": [
+        5,
+        5
+      ]
+    },
+    "unverified_quotes": 1,
+    "answers_with_warnings": 2,
+    "errors": 0,
+    "searched_again": 6,
+    "prompt_tokens": 80554,
+    "completion_tokens": 5287
+  }
+}

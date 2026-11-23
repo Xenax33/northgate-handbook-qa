@@ -9,6 +9,7 @@ appears in it, so the first search misses the leave policy. It costs a second mo
 when the first answer is a refusal and the new search finds different documents.
 """
 
+import threading
 from dataclasses import dataclass, field
 from datetime import date
 
@@ -48,22 +49,61 @@ class Answer:
     first_status: str | None = None  # the first answer's status, when a second search ran
 
 
+@dataclass(frozen=True)
+class Index:
+    """Everything built from the documents. Replaced as a whole on reload, so a question asked while a
+    document is being added sees either the old index or the new one, never a mix."""
+
+    documents: dict[str, Document]
+    passages: list[Passage]
+    passages_by_doc: dict[str, list[Passage]]
+    searcher: Searcher
+
+
 class Assistant:
     def __init__(self, settings: Settings, model: ChatModel | None = None, embedder: Embedder | None = None,
                  documents: list[Document] | None = None) -> None:
         self.settings = settings
         self.embedder = embedder or Embedder(settings.embedding_model, settings.model_cache)
         self.model = model or OpenAICompatibleModel(settings.llm_base_url, settings.llm_model, settings.llm_api_key)
-        self.load(documents if documents is not None else load_corpus(settings.corpus_dir, settings.today()))
+        self._reload_lock = threading.Lock()
+        self.load(documents if documents is not None else self._read_documents())
+
+    def _read_documents(self) -> list[Document]:
+        return load_corpus(self.settings.corpus_dir, self.settings.today(), self.settings.uploads_dir)
 
     def load(self, documents: list[Document]) -> None:
-        """(Re)build passages and search, e.g. after a document is added."""
-        self.documents = {doc.doc_id: doc for doc in documents}
-        self.passages = build_passages(documents)
-        self.passages_by_doc: dict[str, list[Passage]] = {}
-        for passage in self.passages:
-            self.passages_by_doc.setdefault(passage.doc_id, []).append(passage)
-        self.searcher = Searcher(self.passages, self.embedder)
+        """Build passages and search for these documents, then switch to them in one step."""
+        passages = build_passages(documents)
+        by_doc: dict[str, list[Passage]] = {}
+        for passage in passages:
+            by_doc.setdefault(passage.doc_id, []).append(passage)
+        self.index = Index({doc.doc_id: doc for doc in documents}, passages, by_doc, Searcher(passages, self.embedder))
+        try:
+            self.embedder.save()  # next start loads these vectors instead of recomputing them
+        except OSError:
+            pass  # a read-only disk only costs speed
+
+    def reload(self) -> None:
+        """Read the handbook and the uploads again (after an upload or a removal), without a restart."""
+        with self._reload_lock:
+            self.load(self._read_documents())
+
+    @property
+    def documents(self) -> dict[str, Document]:
+        return self.index.documents
+
+    @property
+    def passages(self) -> list[Passage]:
+        return self.index.passages
+
+    @property
+    def passages_by_doc(self) -> dict[str, list[Passage]]:
+        return self.index.passages_by_doc
+
+    @property
+    def searcher(self) -> Searcher:
+        return self.index.searcher
 
     def ask(self, question: str) -> Answer:
         question = (question or "").strip()
@@ -72,13 +112,14 @@ class Assistant:
         if len(question) > MAX_QUESTION_CHARS:
             raise ValueError(f"Questions are limited to {MAX_QUESTION_CHARS} characters.")
         today = self.settings.today()
-        context = build_context(self.searcher, self.passages_by_doc, question)
+        index = self.index  # one consistent snapshot for this question
+        context = build_context(index.searcher, index.passages_by_doc, question)
         first = self.model.complete_json(system_prompt(today), user_prompt(render_context(context), question), ANSWER_SCHEMA)
         completions, final, again, first_status = [first], first, None, None
 
         terms = str(first.data.get("search_terms") or "").strip()
         if status_of(first.data) == "refuse" and terms and terms.lower() != question.lower():
-            new_context = build_context(self.searcher, self.passages_by_doc, terms)
+            new_context = build_context(index.searcher, index.passages_by_doc, terms)
             if {c.passage.doc_id for c in new_context} != {c.passage.doc_id for c in context}:
                 second = self.model.complete_json(system_prompt(today), user_prompt(render_context(new_context), question), ANSWER_SCHEMA)
                 completions.append(second)

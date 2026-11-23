@@ -43,6 +43,7 @@ class Document:
     superseded_by: str | None = None
     supersedes: str | None = None
     sections: list[Section] = field(default_factory=list)
+    source: str = "handbook"  # "handbook" (data/corpus) or "upload" (data/uploads, D24)
 
     @property
     def text(self) -> str:

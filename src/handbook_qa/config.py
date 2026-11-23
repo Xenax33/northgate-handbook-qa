@@ -18,6 +18,7 @@ def _project_root() -> Path:
 PROJECT_ROOT = _project_root()
 DEFAULT_CORPUS = PROJECT_ROOT / "data" / "corpus"
 DEFAULT_MODEL_CACHE = PROJECT_ROOT / ".cache" / "models"
+DEFAULT_UPLOADS = PROJECT_ROOT / "data" / "uploads"
 
 
 def load_dotenv(path: Path = PROJECT_ROOT / ".env") -> None:
@@ -44,6 +45,8 @@ class Settings:
     llm_base_url: str  # any OpenAI-compatible endpoint (D13); Gemini by default
     llm_model: str
     llm_api_key: str | None  # never logged or printed
+    uploads_dir: Path | None = None  # None: uploads switched off (the eval uses the official handbook only)
+    upload_token: str | None = None  # if set, uploads need it (D26); never logged or printed
 
     def today(self) -> date:
         return self.fixed_today or date.today()
@@ -64,4 +67,6 @@ def get_settings() -> Settings:
         llm_base_url=os.environ.get("LLM_BASE_URL", GEMINI_OPENAI_URL),
         llm_model=os.environ.get("LLM_MODEL", "gemini-3.1-flash-lite"),
         llm_api_key=os.environ.get("LLM_API_KEY") or os.environ.get("GEMINI_API_KEY"),
+        uploads_dir=Path(os.environ.get("HANDBOOK_UPLOADS", DEFAULT_UPLOADS)),
+        upload_token=os.environ.get("UPLOAD_TOKEN") or None,
     )

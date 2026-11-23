@@ -77,7 +77,19 @@ button { font: inherit; cursor: pointer; }
 .unverified { color: var(--bad); }
 .link-button { background: none; border: none; color: var(--accent); padding: 0; text-decoration: underline; }
 
-.browse { margin: 28px 0 40px; }
+.browse { margin: 28px 0 0; }
+#browse { margin-bottom: 40px; }
+.upload { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 10px 14px; align-items: center; max-width: 560px; }
+.upload label { font-weight: 600; font-size: 0.92rem; }
+.upload input, .upload select { font: inherit; padding: 7px 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); color: var(--text); min-width: 0; }
+.upload #token-row { display: contents; }
+.upload #token-row[hidden] { display: none; }
+.upload > div:last-of-type, .upload .field-error, .upload .note { grid-column: 1 / -1; }
+.primary { padding: 9px 18px; border: none; border-radius: var(--radius); background: var(--accent); color: var(--accent-text); font-weight: 600; }
+.primary[aria-busy="true"] { opacity: 0.7; cursor: progress; }
+.badge.uploaded { background: var(--info-bg); color: var(--info); margin-left: 6px; }
+.remove { margin-left: 6px; font-size: 0.85rem; }
+@media (max-width: 640px) { .upload { grid-template-columns: 1fr; } }
 .browse summary { cursor: pointer; font-weight: 600; }
 .hint { color: var(--muted); font-size: 0.875rem; }
 .doc-list { list-style: none; padding: 0; margin: 0; columns: 2; column-gap: 24px; }

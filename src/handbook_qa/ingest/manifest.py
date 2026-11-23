@@ -33,7 +33,7 @@ class ManifestEntry:
 REQUIRED = ("doc_id", "path", "title", "category", "owner", "effective_date", "status")
 
 
-def read_manifest(path: Path) -> list[ManifestEntry]:
+def read_manifest(path: Path, check: bool = True) -> list[ManifestEntry]:
     try:
         raw = json.loads(path.read_text(encoding="utf-8-sig"))  # -sig: Notepad and PowerShell 5.1 add a BOM
     except json.JSONDecodeError as error:
@@ -59,7 +59,8 @@ def read_manifest(path: Path) -> list[ManifestEntry]:
                 supersedes=item.get("supersedes"),
             )
         )
-    check_references(entries)
+    if check:  # uploads are checked together with the handbook, since they may replace a handbook document
+        check_references(entries)
     return entries
 
 
