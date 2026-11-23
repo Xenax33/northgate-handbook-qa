@@ -8,7 +8,7 @@ import pytest
 
 from handbook_qa.answer import UNVERIFIED, Assistant
 from handbook_qa.answer.citations import check_citations, quote_in
-from handbook_qa.answer.context import SMALL_DOCUMENT_CHARS, ContextPassage
+from handbook_qa.answer.context import SMALL_DOCUMENT_CHARS, ContextPassage, build_context
 from handbook_qa.answer.llm import Completion, LLMError, OpenAICompatibleModel, redact
 from handbook_qa.config import Settings
 from handbook_qa.ingest import State
@@ -18,15 +18,17 @@ from conftest import CORPUS, TODAY
 
 
 class FakeModel:
+    """Replies with `reply`, or with each reply of a list in turn (for the second search, D20)."""
+
     name = "fake"
 
-    def __init__(self, reply: dict):
-        self.reply = reply
+    def __init__(self, reply):
+        self.replies = reply if isinstance(reply, list) else [reply]
         self.calls: list[tuple[str, str]] = []
 
     def complete_json(self, system, user, schema):
         self.calls.append((system, user))
-        return Completion(self.reply, 100, 20, 0.01)
+        return Completion(self.replies[min(len(self.calls), len(self.replies)) - 1], 100, 20, 0.01)
 
 
 SETTINGS = Settings(corpus_dir=CORPUS, model_cache=Path(".cache/models"), embedding_model="BAAI/bge-small-en-v1.5",
@@ -127,6 +129,63 @@ def test_empty_or_huge_questions_are_refused_before_any_model_call(assistant, qu
     with pytest.raises(ValueError):
         assistant.ask(question)
     assert assistant.model.calls == []
+
+
+# Second search after a refusal (D20) ------------------------------------------------------------------
+
+
+def refusal(terms):
+    return {"status": "refuse", "answer": "Not in these passages.", "citations": [], "search_terms": terms}
+
+
+def test_a_refusal_with_handbook_words_searches_again_and_asks_once_more(assistant):
+    assistant.model = FakeModel([refusal("annual leave days per year"),
+                                 {"status": "answer", "answer": "16 days.", "citations": [], "search_terms": ""}])
+    answer = assistant.ask("how much PTO do i get")
+    assert len(assistant.model.calls) == 2 and answer.model_calls == 2
+    assert answer.searched_again_with == "annual leave days per year" and answer.first_status == "refuse"
+    assert answer.status == "answer" and answer.text == "16 days."
+    assert "hr-leave-policy-v2" in {c.passage.doc_id for c in answer.context}  # the second search found it
+    second_user_prompt = assistant.model.calls[1][1]
+    assert second_user_prompt.endswith("Employee question: how much PTO do i get")  # the employee's own words
+    assert answer.prompt_tokens == 200
+
+
+def test_no_second_call_when_the_search_terms_just_repeat_the_question(assistant):
+    question = "What is the deductible on the dental insurance?"
+    assistant.model = FakeModel(refusal(question.lower()))
+    answer = assistant.ask(question)
+    assert len(assistant.model.calls) == 1 and answer.searched_again_with is None
+
+
+def test_no_second_call_when_the_new_search_finds_the_same_documents(assistant, monkeypatch):
+    import handbook_qa.answer as answer_module
+
+    question = "What is the deductible on the dental insurance?"
+    same = build_context(assistant.searcher, assistant.passages_by_doc, question)
+    monkeypatch.setattr(answer_module, "build_context", lambda *args, **kwargs: same)  # any words find the same documents
+    assistant.model = FakeModel(refusal("dental insurance deductible amount"))
+    assert assistant.ask(question).model_calls == 1
+
+
+def test_no_second_call_without_search_terms_or_when_not_refusing(assistant):
+    assistant.model = FakeModel(refusal(""))
+    assert assistant.ask("Who is my VP?").model_calls == 1
+    assistant.model = FakeModel({"status": "answer", "answer": "2.", "citations": [], "search_terms": "vpn sessions"})
+    assert assistant.ask("VPN sessions?").model_calls == 1
+
+
+def test_only_one_second_search_even_if_the_model_refuses_again(assistant):
+    assistant.model = FakeModel([refusal("annual leave days per year"), refusal("holiday entitlement")])
+    answer = assistant.ask("how much PTO do i get")
+    assert len(assistant.model.calls) == 2 and answer.status == "refuse"
+
+
+def test_the_prompt_asks_for_search_terms():
+    from handbook_qa.answer.prompt import ANSWER_SCHEMA, system_prompt
+
+    assert "search_terms" in ANSWER_SCHEMA["required"]
+    assert '"search_terms"' in system_prompt(TODAY)
 
 
 # Quote matching -----------------------------------------------------------------------------------------

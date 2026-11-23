@@ -19,6 +19,8 @@ def main(argv: list[str]) -> int:
         print(f"Error: {error}")
         return 1
     print(f"[{answer.status}] {answer.text}\n")
+    if answer.searched_again_with:
+        print(f"  (first answer was a refusal; searched again with: \"{answer.searched_again_with}\")\n")
     for citation in answer.citations:
         mark = "verified" if citation.verified else f"NOT VERIFIED ({citation.problem})"
         where = citation.passage.label if citation.passage else citation.key
@@ -27,7 +29,7 @@ def main(argv: list[str]) -> int:
         print(f"\n  Warning: {warning}")
     sent = sorted({item.passage.doc_id for item in answer.context})
     print(f"\n  ({answer.model}, today {answer.today}, {len(answer.context)} passages from {len(sent)} documents, "
-          f"{answer.prompt_tokens} tokens in / {answer.completion_tokens} out, {answer.seconds} s)")
+          f"{answer.model_calls} model call(s), {answer.prompt_tokens} tokens in / {answer.completion_tokens} out, {answer.seconds} s)")
     return 0
 
 

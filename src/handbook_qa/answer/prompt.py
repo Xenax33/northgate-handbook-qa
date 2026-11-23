@@ -1,4 +1,8 @@
-"""The instructions the model gets (D16) and the JSON shape it must answer in (D15)."""
+"""The instructions the model gets (D16) and the JSON shape it must answer in (D15).
+
+`search_terms` (D20): when the model refuses, it rewrites the question in the handbook's own words,
+and the assistant searches once more with them (see answer/__init__.py).
+"""
 
 from datetime import date
 
@@ -16,6 +20,7 @@ Rules:
 5. If the answer depends on dates (a deadline, "the next release"), work it out from today's date and state the date.
 6. Back every fact with a citation: the passage key (such as "P3") and a quote copied word for word from that passage, a short phrase or sentence. Do not paraphrase quotes. Cite every passage you used. A refusal may have no citations.
 7. Write plain, short English: the direct answer first, in one to four sentences or a short list.
+8. Always fill "search_terms". If you refuse, write the question again in the words a company handbook would use: spell out abbreviations and use formal policy terms (for example "work from home" becomes "remote work"). The handbook will be searched again with them. If you do not refuse, use an empty string.
 """
 
 USER_PROMPT = """Handbook passages:
@@ -27,7 +32,7 @@ Employee question: {question}"""
 ANSWER_SCHEMA = {
     "type": "object",
     "additionalProperties": False,
-    "required": ["status", "answer", "citations"],
+    "required": ["status", "answer", "citations", "search_terms"],
     "properties": {
         "status": {"type": "string", "enum": ["answer", "refuse", "clarify"]},
         "answer": {"type": "string"},
@@ -40,6 +45,7 @@ ANSWER_SCHEMA = {
                 "properties": {"passage": {"type": "string"}, "quote": {"type": "string"}},
             },
         },
+        "search_terms": {"type": "string"},
     },
 }
 

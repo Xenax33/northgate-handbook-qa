@@ -100,6 +100,9 @@ def main() -> int:
                 prompt_tokens=answer.prompt_tokens,
                 completion_tokens=answer.completion_tokens,
                 seconds=answer.seconds,
+                model_calls=answer.model_calls,
+                searched_again_with=answer.searched_again_with,
+                first_status=answer.first_status,
             )
         record = score_record(question, record)
         run["per_question"].append(record)

@@ -1,7 +1,12 @@
-"""The assistant: question in, answer with checked sources out (decisions D10, D13-D16).
+"""The assistant: question in, answer with checked sources out (decisions D10, D13-D16, D20).
 
     search the handbook -> pick the documents the model reads -> ask the model for JSON
+    -> if it refused: search again with the handbook words it suggested, and ask once more
     -> check every citation -> add warnings where the answer can't be trusted as shown
+
+The second search (D20) exists because employees don't use the handbook's words: "PTO" never
+appears in it, so the first search misses the leave policy. It costs a second model request only
+when the first answer is a refusal and the new search finds different documents.
 """
 
 from dataclasses import dataclass, field
@@ -38,6 +43,9 @@ class Answer:
     prompt_tokens: int | None = None
     completion_tokens: int | None = None
     seconds: float | None = None
+    model_calls: int = 1
+    searched_again_with: str | None = None  # the model's handbook wording, when a second search ran
+    first_status: str | None = None  # the first answer's status, when a second search ran
 
 
 class Assistant:
@@ -65,23 +73,44 @@ class Assistant:
             raise ValueError(f"Questions are limited to {MAX_QUESTION_CHARS} characters.")
         today = self.settings.today()
         context = build_context(self.searcher, self.passages_by_doc, question)
-        completion = self.model.complete_json(system_prompt(today), user_prompt(render_context(context), question), ANSWER_SCHEMA)
-        data = completion.data
-        status = data.get("status") if data.get("status") in STATUSES else "answer"
-        citations = check_citations(data.get("citations") or [], context)
+        first = self.model.complete_json(system_prompt(today), user_prompt(render_context(context), question), ANSWER_SCHEMA)
+        completions, final, again, first_status = [first], first, None, None
+
+        terms = str(first.data.get("search_terms") or "").strip()
+        if status_of(first.data) == "refuse" and terms and terms.lower() != question.lower():
+            new_context = build_context(self.searcher, self.passages_by_doc, terms)
+            if {c.passage.doc_id for c in new_context} != {c.passage.doc_id for c in context}:
+                second = self.model.complete_json(system_prompt(today), user_prompt(render_context(new_context), question), ANSWER_SCHEMA)
+                completions.append(second)
+                final, context, again, first_status = second, new_context, terms, "refuse"
+
+        status = status_of(final.data)
+        citations = check_citations(final.data.get("citations") or [], context)
         return Answer(
             question=question,
             status=status,
-            text=str(data.get("answer", "")).strip(),
+            text=str(final.data.get("answer", "")).strip(),
             citations=citations,
             warnings=warnings_for(status, citations),
             context=context,
             model=self.model.name,
             today=today,
-            prompt_tokens=completion.prompt_tokens,
-            completion_tokens=completion.completion_tokens,
-            seconds=completion.seconds,
+            prompt_tokens=total(c.prompt_tokens for c in completions),
+            completion_tokens=total(c.completion_tokens for c in completions),
+            seconds=round(sum(c.seconds for c in completions), 2),
+            model_calls=len(completions),
+            searched_again_with=again,
+            first_status=first_status,
         )
+
+
+def status_of(data: dict) -> str:
+    return data.get("status") if data.get("status") in STATUSES else "answer"
+
+
+def total(values) -> int | None:
+    values = [v for v in values if v is not None]
+    return sum(values) if values else None
 
 
 def warnings_for(status: str, citations: list[Citation]) -> list[str]:

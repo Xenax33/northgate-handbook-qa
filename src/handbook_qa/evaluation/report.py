@@ -31,6 +31,7 @@ def summarise(records: list[dict]) -> dict:
         "unverified_quotes": sum(1 for r in records for c in r.get("citations", []) if not c["verified"]),
         "answers_with_warnings": sum(1 for r in records if r.get("warnings")),
         "errors": sum(1 for r in records if r["status"] == "error"),
+        "searched_again": sum(1 for r in records if r.get("searched_again_with")),
         "prompt_tokens": sum(r.get("prompt_tokens") or 0 for r in records),
         "completion_tokens": sum(r.get("completion_tokens") or 0 for r in records),
     }
@@ -57,7 +58,7 @@ def markdown_report(run: dict) -> str:
     lines += [f"| {m} | {pct(s['measures'][m])} |" for m in MEASURES]
     lines += ["", "| Category | Passed |", "|---|---|"] + [f"| {c} | {pct(v)} |" for c, v in s["categories"].items()]
     lines += ["", f"Unverified quotes: {s['unverified_quotes']}. Answers with a warning: {s['answers_with_warnings']}. "
-                  f"Errors: {s['errors']}.", "", "## Failures", ""]
+                  f"Errors: {s['errors']}. Second searches after a refusal (D20): {s.get('searched_again', 0)}.", "", "## Failures", ""]
     failures = [r for r in run["per_question"] if not r["passed"]]
     if not failures:
         lines.append("None.")
