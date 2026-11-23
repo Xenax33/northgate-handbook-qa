@@ -15,7 +15,7 @@ Gemini 3.1 Flash-Lite is the model inside the product. I didn't use it as an ass
 | Options and a recommendation for each decision, one at a time | Claude Code | I made all 28 decisions. I chose differently from the recommendation 5 times (repo name, JSONL over YAML, a provider other than Groq, Flash-Lite 3.1 over 3.5, skipping the held-out set) and found a flaw in one (below). |
 | Drafting the 40 test questions | Claude Code | All 40, after I reviewed each category with its expected answers. One question's accepted wordings were extended later, after a correct answer failed the check. |
 | Spikes: comparing readers, search methods, models, memory use | Claude Code | The measured numbers. Several decisions rest on them, e.g. hybrid search and the batch size for Render. |
-| Code and tests | Claude Code | Nearly all of it, checked by 158 tests, deliberate-bug checks, a fresh-clone install, six eval runs and testing the page in a browser. |
+| Code and tests | Claude Code | Nearly all of it, checked by 159 tests, deliberate-bug checks, a fresh-clone install, six eval runs and testing the page in a browser. |
 | Independent code review | Claude (separate agent) | 16 findings. The high-confidence ones were reproduced and fixed, each with a test. Two were rejected with a reason, and a few rare cases were documented as known limits instead. |
 | README, DECISIONS.md and this file | Claude Code | Drafted from my decision log at my request. I asked for plain wording, and the numbers were re-checked against the saved results. |
 

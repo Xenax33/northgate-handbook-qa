@@ -32,3 +32,16 @@ def test_metadata_lines_are_not_part_of_the_text(corpus):
     # Front matter and "Document ID: ..." lines repeat the manifest; they would only add noise.
     leaks = [doc_id for doc_id, doc in corpus.items() if "Document ID:" in doc.text or "\ndoc_id:" in "\n" + doc.text]
     assert leaks == []
+
+
+def test_handbook_files_are_byte_for_byte_the_originals():
+    """Checksums taken from the assessment zip. Fails if a checkout changed a file, e.g. Git on Windows
+    rewriting line endings inside a PDF (prevented by .gitattributes)."""
+    import hashlib
+
+    from conftest import CORPUS
+
+    expected = json.loads((CORPUS.parents[1] / "tests" / "corpus_checksums.json").read_text(encoding="utf-8"))
+    actual = {name: hashlib.sha256((CORPUS / name).read_bytes()).hexdigest() for name in expected}
+    changed = sorted(name for name in expected if actual[name] != expected[name])
+    assert changed == [], f"changed since the original: {changed}"

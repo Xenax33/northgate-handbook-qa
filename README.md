@@ -26,7 +26,7 @@ but missing, three people called Maya. The assistant is built around those traps
 | Web app | FastAPI backend + one plain HTML/CSS/JS page with a source viewer that highlights the quoted sentence |
 | Uploads | Add a document from the page (title, effective date, which document it replaces); usable by the next question, no restart |
 | Evaluation | 40 questions written before any code, 4 measures checked in code; every run saved in `eval/results/` |
-| Tests | 157; no API key needed (internet only for the one-time model download) |
+| Tests | 159; no API key needed (internet only for the one-time model download) |
 
 ## Results
 
@@ -46,9 +46,10 @@ Run 6 measures the current code: retrieval 35/35, facts 36/36, citations 35/35, 
 clarify) 40/40, 0 unverified quotes, about 75,000 tokens in. The extra requests are retries after temporary
 Gemini errors (HTTP 503), which the evaluation retries and counts.
 
-**Read this number with care:** the dev questions are my own, and two design choices were made while looking
-at them. A separate set of held-out questions, written without AI and never used for tuning, is the honest
-check (see [DECISIONS.md](DECISIONS.md)).
+**Read this number with care:** the questions were written before any code, from the traps in the handbook,
+but two design choices (the search instruction and the second search after a refusal) were made while looking
+at them, and there is no separate held-out set. 40/40 shows the traps found are handled; it is not a measure
+of questions nobody has seen. See [DECISIONS.md](DECISIONS.md).
 
 ## Quick start
 
@@ -144,7 +145,7 @@ uv run pytest -q
 ```
 
 `uv sync` installs the exact versions in `uv.lock`. The first test run downloads the search model (about 67 MB)
-and takes about a minute; it should end with `157 passed`. No API key is needed for the tests.
+and takes about a minute; it should end with `159 passed`. No API key is needed for the tests.
 
 **3. Add a Gemini API key** (free, for the web app and the evaluation).
 
@@ -289,7 +290,8 @@ data/corpus/     the 64 handbook documents and manifest.json, unchanged
 
 ## Known limitations
 
-- **The score is on my own questions.** 40/40 says the traps I found are handled; held-out questions are the real test.
+- **The score is on my own questions.** 40/40 says the traps I found are handled; questions written by someone
+  else, never used for tuning, would be the real test (not done yet).
 - **The measures check required facts, not everything said.** A refusal once added a false aside ("the handbook
   doesn't cover organisational charts"); nothing in the scoring catches that.
 - **One reader limit:** a PDF bullet without closing punctuation runs into the next line (none in this handbook).

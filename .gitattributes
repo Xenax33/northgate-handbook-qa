@@ -1,0 +1,6 @@
+# The handbook documents must stay byte-for-byte identical to the originals on every OS.
+# Without this, Git on Windows (core.autocrlf=true) rewrites line endings inside the PDFs on checkout,
+# which shifts their internal byte offsets (pypdf then warns "incorrect startxref pointer").
+data/** -text
+*.pdf binary
+*.docx binary
